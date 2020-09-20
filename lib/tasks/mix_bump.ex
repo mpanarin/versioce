@@ -12,10 +12,10 @@ defmodule Mix.Tasks.Bump do
   @pre_hooks Application.compile_env(:versioce, :pre_hooks)
   @post_hooks Application.compile_env(:versioce, :post_hooks)
 
-  defp run({:error, error}, _) do
+  defp run({:error, error} = res, _) do
     IO.puts("Error: #{error}")
 
-    {:error, error}
+    res
   end
 
   defp run({:ok, current_version}, params) do
@@ -25,8 +25,7 @@ defmodule Mix.Tasks.Bump do
     end)
 
     IO.puts("Bumping version from #{current_version}:")
-    new_version = Bumper.bump(params)
-    |> elem(1)
+    new_version = Bumper.bump(params, current_version)
     |> IO.inspect
 
     IO.inspect(@post_hooks, label: "Running post-hooks")
