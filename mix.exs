@@ -4,7 +4,7 @@ defmodule Versioce.MixProject do
   def project do
     [
       app: :versioce,
-      version: "0.0.1",
+      version: "0.0.2",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: [{:ex_doc, "~> 0.21", only: [:release, :dev]}],

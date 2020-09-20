@@ -10,7 +10,7 @@ The package can be installed by adding `versioce` to your list of dependencies i
 ```elixir
 def deps do
   [
-    {:versioce, "~> 0.0.1"}
+    {:versioce, "~> 0.0.2"}
   ]
 end
 ```
