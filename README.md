@@ -51,10 +51,9 @@ The result of the first hook will be piped into the next one.
 
 ```elixir
 defmodule MyProj.Versioce.PreHook do
+  use Versioce.PreHook
   def run(params) do
-    IO.inspect params
-
-    params
+    IO.inspect(params)
   end
 end
 ```
@@ -84,10 +83,9 @@ Work the same as pre hooks. The only differences are:
 
 ```elixir
 defmodule MyProj.Versioce.PostHook do
+  use Versioce.PostHook
   def run(version) do
-    IO.inspect version
-
-    version
+    IO.inspect(version)
   end
 end
 ```
