@@ -1,6 +1,10 @@
 defmodule Versioce.Bumper do
   @options [pre: :string, build: :string]
 
+  @doc """
+  Get current project version.
+  """
+  @spec current_version() :: {:ok | :error, String.t}
   def current_version do
     case Mix.Project.get() do
       nil -> {:error, "No project configured"}
@@ -96,6 +100,10 @@ defmodule Versioce.Bumper do
     new_version
   end
 
+  @doc """
+  Bumps versions in all the files specified in config + mix.exs
+  """
+  @spec bump([String.t], String.t) :: String.t
   def bump(options, from) do
     OptionParser.parse!(options, strict: @options)
     |> do_bump(from)
