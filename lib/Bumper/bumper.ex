@@ -1,5 +1,5 @@
 defmodule Versioce.Bumper do
-  @options [pre: :string, build: :string]
+  @options [pre: :string, build: :string, no_pre_hooks: :boolean, no_post_hooks: :boolean]
 
   @doc """
   Get current project version.

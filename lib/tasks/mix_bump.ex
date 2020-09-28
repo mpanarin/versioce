@@ -28,19 +28,23 @@ defmodule Mix.Tasks.Bump do
   end
 
   defp run({:ok, current_version}, params) do
-    IO.inspect(@pre_hooks, label: "Running pre-hooks")
-    Enum.reduce(@pre_hooks, params, fn module, params ->
-      module.run(params)
-    end)
+    if "--no-pre-hooks" not in params do
+      IO.inspect(@pre_hooks, label: "Running pre-hooks")
+      Enum.reduce(@pre_hooks, params, fn module, params ->
+        module.run(params)
+      end)
+    end
 
     IO.puts("Bumping version from #{current_version}:")
     new_version = Bumper.bump(params, current_version)
     |> IO.inspect
 
-    IO.inspect(@post_hooks, label: "Running post-hooks")
-    Enum.reduce(@post_hooks, new_version, fn module, params ->
-      module.run(params)
-    end)
+    if "--no-post-hooks" not in params do
+      IO.inspect(@post_hooks, label: "Running post-hooks")
+      Enum.reduce(@post_hooks, new_version, fn module, params ->
+        module.run(params)
+      end)
+    end
 
     {:ok, new_version}
   end
@@ -50,12 +54,15 @@ defmodule Mix.Tasks.Bump do
 
   Takes in list of params which will later be parsed with OptionParser.
 
-  > mix bump major|minor|patch [--pre :string] [--build :string]
+  > mix bump major|minor|patch
+      [--pre :string]
+      [--build :string]
+      [--no-pre-hooks]
+      [--no-post-hooks]
   """
   @spec run([String.t]) :: {:ok, String.t} | {:error, String.t}
   @impl Mix.Task
   def run(params) do
     run(Bumper.current_version, params)
   end
-
 end
