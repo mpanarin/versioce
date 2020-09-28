@@ -36,7 +36,8 @@ config :versioce,
 ### Configure Hooks
 
 `Versioce` is agnostic of your VCS(as of now) or other things you need to do.
-Some people want to generate changelogs, some - automatically notify teammates at slack, etc.
+Some people want to generate changelogs, some - automatically notify teammates
+at slack, publish package to hex, etc.
 
 To make it possible - `Versioce` has Hooks. There are `pre` hooks and `post` hooks.
 Hook is a list of simple elixir modules that have `run` function in them.

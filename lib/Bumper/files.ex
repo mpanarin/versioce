@@ -2,17 +2,19 @@ defmodule Versioce.Bumper.Files do
   @files Application.compile_env!(:versioce, :files)
   @global Application.compile_env!(:versioce, :global)
 
+  @moduledoc """
+  Module that is responsible for updating files in the project.
+  """
+
   @doc """
   Updates version in files from config from `from` version to `to` version.
 
   By default only updates first instance of version found.
-  If you want to update version in the whole file set :global key
+  If you want to update version in the whole file set `:global` key
   in the config.
 
-  ```elixir
-  config :versioce,
-    global: true
-  ```
+      config :versioce,
+        global: true
   """
   @spec update_version_files(String.t(), String.t()) :: :ok | Exception
   def update_version_files(from, to) do

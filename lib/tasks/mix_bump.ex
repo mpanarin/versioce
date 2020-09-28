@@ -6,7 +6,8 @@ defmodule Mix.Tasks.Bump do
   @moduledoc """
   A task that bumps your projects version.
 
-  > mix bump major|minor|patch [--pre :string] [--build :string]
+  > mix bump major|minor|patch [--pre :string] [--build :string] [--no-pre-hooks] [--no-post-hooks]
+
   ## Examples:
 
       $> mix bump patch --pre alpha
@@ -49,17 +50,7 @@ defmodule Mix.Tasks.Bump do
     {:ok, new_version}
   end
 
-  @doc """
-  Implementation of run for Mix.Task
-
-  Takes in list of params which will later be parsed with OptionParser.
-
-  > mix bump major|minor|patch
-      [--pre :string]
-      [--build :string]
-      [--no-pre-hooks]
-      [--no-post-hooks]
-  """
+  @doc false
   @spec run([String.t]) :: {:ok, String.t} | {:error, String.t}
   @impl Mix.Task
   def run(params) do

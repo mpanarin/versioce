@@ -14,6 +14,7 @@ defmodule Versioce.MixProject do
       name: "Versioce",
       source_url: "https://github.com/mpanarin/versioce",
       docs: [
+        main: "readme",
         extras: ["README.md"]
       ]
     ]

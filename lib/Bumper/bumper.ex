@@ -1,8 +1,20 @@
 defmodule Versioce.Bumper do
   @options [pre: :string, build: :string, no_pre_hooks: :boolean, no_post_hooks: :boolean]
 
+  @moduledoc """
+  Module responsible for the bumping itself.
+
+  If you are interested in the process of writing and updating files
+  check `Versioce.Bumper.Files` module.
+  """
+
   @doc """
   Get current project version.
+
+  ## Example
+
+      iex> Versioce.Bumper.current_version
+      {:ok, "0.1.0"}
   """
   @spec current_version() :: {:ok | :error, String.t}
   def current_version do
@@ -102,6 +114,11 @@ defmodule Versioce.Bumper do
 
   @doc """
   Bumps versions in all the files specified in config + mix.exs
+
+  ## Example
+
+      iex> Versioce.Bumper.bump(["minor"], "0.0.1")
+      "0.1.0"
   """
   @spec bump([String.t], String.t) :: String.t
   def bump(options, from) do

@@ -9,9 +9,10 @@ defmodule Mix.Tasks.Bump.Version do
   ## Examples:
 
       $> mix bump.version
-      0.1.0
+      "0.1.0"
   """
 
+  @doc false
   def run(_) do
     {_, text} = Versioce.Bumper.current_version
 
