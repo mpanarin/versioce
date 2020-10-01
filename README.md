@@ -5,7 +5,7 @@ It is heavily inspired by [bumpversion](https://github.com/peritus/bumpversion).
 
 ## Installation
 
-The package can be installed by adding `versioce` to your list of dependencies in `mix.exs`:
+The [package](https://hex.pm/packages/versioce) can be installed by adding `versioce` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do

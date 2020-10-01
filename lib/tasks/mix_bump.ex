@@ -1,7 +1,4 @@
 defmodule Mix.Tasks.Bump do
-  use Mix.Task
-  alias Versioce.Bumper
-
   @shortdoc "Bump the version of your project"
   @moduledoc """
   A task that bumps your projects version.
@@ -16,11 +13,11 @@ defmodule Mix.Tasks.Bump do
       "0.0.3-alpha"
       Running post-hooks: []
   """
+  use Mix.Task
+  alias Versioce.Bumper
+  alias Versioce.Config
 
   @preferred_cli_env :dev
-
-  @pre_hooks Application.compile_env(:versioce, :pre_hooks)
-  @post_hooks Application.compile_env(:versioce, :post_hooks)
 
   defp run({:error, error} = res, _) do
     IO.puts("Error: #{error}")
@@ -30,8 +27,8 @@ defmodule Mix.Tasks.Bump do
 
   defp run({:ok, current_version}, params) do
     if "--no-pre-hooks" not in params do
-      IO.inspect(@pre_hooks, label: "Running pre-hooks")
-      Enum.reduce(@pre_hooks, params, fn module, params ->
+      IO.inspect(Config.pre_hooks, label: "Running pre-hooks")
+      Enum.reduce(Config.pre_hooks, params, fn module, params ->
         module.run(params)
       end)
     end
@@ -41,8 +38,8 @@ defmodule Mix.Tasks.Bump do
     |> IO.inspect
 
     if "--no-post-hooks" not in params do
-      IO.inspect(@post_hooks, label: "Running post-hooks")
-      Enum.reduce(@post_hooks, new_version, fn module, params ->
+      IO.inspect(Config.post_hooks, label: "Running post-hooks")
+      Enum.reduce(Config.post_hooks, new_version, fn module, params ->
         module.run(params)
       end)
     end
