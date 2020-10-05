@@ -16,7 +16,8 @@ defmodule Versioce.MixProject do
       # Docs
       name: "Versioce",
       source_url: @source_url,
-      docs: docs()
+      docs: docs(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -43,7 +44,8 @@ defmodule Versioce.MixProject do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.22", only: [:release, :dev]}
+      {:ex_doc, "~> 0.22", only: [:release, :dev]},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
   end
 
@@ -53,6 +55,13 @@ defmodule Versioce.MixProject do
       source_url: @source_url,
       source_ref: "v#{@version}",
       extras: ["README.md"]
+    ]
+  end
+
+  defp dialyzer do
+    [
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+      plt_add_apps: [:mix]
     ]
   end
 end
