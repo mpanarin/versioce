@@ -37,3 +37,7 @@ jobs:
       run: mix dialyzer
     - name: Run tests
       run: mix test
+    - name: Check coverage
+      run: |
+        mix coveralls.json
+        bash <(curl -s https://codecov.io/bash)
