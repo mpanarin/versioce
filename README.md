@@ -1,4 +1,5 @@
 # Versioce
+[![Hex version badge](https://img.shields.io/hexpm/v/versioce.svg)](https://hex.pm/packages/versioce)
 
 This is a simple mix task to bump version of your project.
 It is heavily inspired by [bumpversion](https://github.com/peritus/bumpversion).
