@@ -1,5 +1,7 @@
 # Versioce
 [![Hex version badge](https://img.shields.io/hexpm/v/versioce.svg)](https://hex.pm/packages/versioce)
+[![License badge](https://img.shields.io/hexpm/l/versioce.svg)](https://github.com/mpanarin/versioce/blob/master/LICENSE.md)
+[![Actions Status](https://github.com/mpanarin/versioce/workflows/Elixir%20CI/badge.svg)](https://github.com/mpanarin/versioce/actions)
 
 This is a simple mix task to bump version of your project.
 It is heavily inspired by [bumpversion](https://github.com/peritus/bumpversion).
