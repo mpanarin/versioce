@@ -17,7 +17,17 @@ defmodule Versioce.MixProject do
       name: "Versioce",
       source_url: @source_url,
       docs: docs(),
-      dialyzer: dialyzer()
+      # dialyzer
+      dialyzer: dialyzer(),
+      # coverage
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.json": :test,
+      ]
     ]
   end
 
@@ -45,7 +55,8 @@ defmodule Versioce.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.22", only: [:release, :dev]},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:excoveralls, "~> 0.10", only: :test},
     ]
   end
 
