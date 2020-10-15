@@ -16,7 +16,7 @@ defmodule Versioce.Bumper do
       iex> Versioce.Bumper.current_version
       {:ok, "0.1.0"}
   """
-  @spec current_version() :: {:ok | :error, String.t}
+  @spec current_version() :: {:ok, String.t} | {:error, String.t}
   def current_version do
     case Mix.Project.get() do
       nil -> {:error, "No project configured"}
@@ -58,6 +58,8 @@ defmodule Versioce.Bumper do
       |> add_build_pre(options)
       |> to_string
 
+    Version.parse!(new_version)
+
     Versioce.Bumper.Files.update_version_files(from, new_version)
     new_version
   end
@@ -72,6 +74,8 @@ defmodule Versioce.Bumper do
       })
       |> add_build_pre(options)
       |> to_string
+
+    Version.parse!(new_version)
 
     Versioce.Bumper.Files.update_version_files(from, new_version)
     new_version
@@ -88,6 +92,8 @@ defmodule Versioce.Bumper do
       })
       |> add_build_pre(options)
       |> to_string
+
+    Version.parse!(new_version)
 
     Versioce.Bumper.Files.update_version_files(from, new_version)
     new_version
