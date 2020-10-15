@@ -17,6 +17,7 @@ defmodule Versioce.Bumper.FilesImplementation do
 
   alias Versioce.Config
 
+  # coveralls-ignore-start
   @doc """
   Updates version in files from config from `from` version to `to` version.
 
@@ -40,4 +41,5 @@ defmodule Versioce.Bumper.FilesImplementation do
 
     File.write!(file, data)
   end
+  # coveralls-ignore-stop
 end
