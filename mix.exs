@@ -57,6 +57,7 @@ defmodule Versioce.MixProject do
       {:ex_doc, "~> 0.22", only: [:release, :dev]},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
+      {:git_cli, "~> 0.3.0"},
     ]
   end
 
@@ -65,7 +66,10 @@ defmodule Versioce.MixProject do
       main: "readme",
       source_url: @source_url,
       source_ref: "v#{@version}",
-      extras: ["README.md"]
+      extras: [
+        "README.md",
+        "docs/available_hooks.md",
+      ]
     ]
   end
 

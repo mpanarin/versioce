@@ -33,13 +33,13 @@ defmodule VersioceTest do
     test "Bumping with pre hooks", fixture do
       Application.put_all_env([
         {:versioce, [
-            {:pre_hooks, [Versioce.PreHooks.InspectHook]},
+            {:pre_hooks, [Versioce.PreHooks.Inspect]},
             {:post_hooks, []},
           ]}
       ])
 
       assert capture_io(fn -> Mix.Task.rerun("bump", ["0.1.0"]) end) == """
-      Running pre-hooks: [Versioce.PreHooks.InspectHook]
+      Running pre-hooks: [Versioce.PreHooks.Inspect]
       ["0.1.0"]
       Bumping version from #{fixture.current_version}:
       "0.1.0"
@@ -51,7 +51,7 @@ defmodule VersioceTest do
       Application.put_all_env([
         {:versioce, [
             {:pre_hooks, []},
-            {:post_hooks, [Versioce.PostHooks.InspectHook]},
+            {:post_hooks, [Versioce.PostHooks.Inspect]},
           ]}
       ])
 
@@ -59,7 +59,7 @@ defmodule VersioceTest do
       Running pre-hooks: []
       Bumping version from #{fixture.current_version}:
       "0.1.0"
-      Running post-hooks: [Versioce.PostHooks.InspectHook]
+      Running post-hooks: [Versioce.PostHooks.Inspect]
       "0.1.0"
       """
     end
@@ -67,7 +67,7 @@ defmodule VersioceTest do
     test "Bumping with pre hooks ignored", fixture do
       Application.put_all_env([
         {:versioce, [
-            {:pre_hooks, [Versioce.PreHooks.InspectHook]},
+            {:pre_hooks, [Versioce.PreHooks.Inspect]},
             {:post_hooks, []},
           ]}
       ])
@@ -82,7 +82,7 @@ defmodule VersioceTest do
       Application.put_all_env([
         {:versioce, [
             {:pre_hooks, []},
-            {:post_hooks, [Versioce.PostHooks.InspectHook]},
+            {:post_hooks, [Versioce.PostHooks.Inspect]},
           ]}
       ])
 

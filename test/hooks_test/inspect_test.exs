@@ -4,13 +4,13 @@ defmodule VersioceTest.Hooks.Inspect do
 
   test "Inspect pre hook" do
     assert capture_io(fn ->
-      assert Versioce.PreHooks.InspectHook.run(["minor"]) == ["minor"]
+      assert Versioce.PreHooks.Inspect.run(["minor"]) == ["minor"]
     end) == "[\"minor\"]\n"
   end
 
   test "Inspect post hook" do
     assert capture_io(fn ->
-      assert Versioce.PostHooks.InspectHook.run("0.1.0") == "0.1.0"
+      assert Versioce.PostHooks.Inspect.run("0.1.0") == "0.1.0"
     end) == "\"0.1.0\"\n"
   end
 end

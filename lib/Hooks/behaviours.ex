@@ -55,7 +55,7 @@ defmodule Versioce.PostHook do
 
   @doc """
   A hook needs to implement `run` which receives
-  a the new version of the project.
+  the new version of the project.
   It should return it as well.
   """
 	@callback run(String.t) :: String.t

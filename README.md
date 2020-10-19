@@ -46,9 +46,12 @@ at slack, publish package to hex, etc.
 To make it possible - `Versioce` has Hooks. There are `pre` hooks and `post` hooks.
 Hook is a list of simple elixir modules that have `run` function in them.
 
+> Check other available configurations in [config docs](Versioce.Config.html)
+
 #### Pre hooks
 
-Are fired before any of the bumping is done.
+Are fired before any of the bumping is done.\
+Check available built-in [pre hooks](docs/available_hooks.md#pre-hooks)\
 They receive all the parameters for the `bump` task as a list of strings.
 Which they can use for their side-effects. But they are **required** to return
 this list.\
@@ -84,7 +87,8 @@ Done.
 
 Work the same as pre hooks. The only differences are:
 1. They are fired after all the version bumping
-2. Their `run` function receives a `version` which was bumped to instead of params.
+2. Their `run` function receives a `version` which was bumped to instead of params.\
+Check available built-in [post hooks](docs/available_hooks.md#post-hooks)
 
 ```elixir
 defmodule MyProj.Versioce.PostHook do
