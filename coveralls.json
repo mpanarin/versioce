@@ -1,6 +1,7 @@
 {
     "skip_files": [
-        "lib/util/config.ex"
+        "lib/util/config.ex",
+        "lib/util/config_macros.ex"
     ],
     "coverage_options":{
         "minimum_coverage": 90
