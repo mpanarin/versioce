@@ -4,7 +4,8 @@
 [![Code coverage badge](https://img.shields.io/codecov/c/github/mpanarin/versioce/master.svg)](https://codecov.io/gh/mpanarin/versioce/branch/master)
 [![License badge](https://img.shields.io/hexpm/l/versioce.svg)](https://github.com/mpanarin/versioce/blob/master/LICENSE.md)
 
-This is a simple mix task to bump version of your project.
+This is a mix task to bump version of your project.
+Versioce includes batteries that are customizable for your liking.
 It is heavily inspired by [bumpversion](https://github.com/peritus/bumpversion).
 
 ## Installation
@@ -39,7 +40,7 @@ config :versioce,
 
 ### Configure Hooks
 
-`Versioce` is agnostic of your VCS(as of now) or other things you need to do.
+`Versioce` is agnostic of your VCS(although has hooks for git) or other things you need to do.
 Some people want to generate changelogs, some - automatically notify teammates
 at slack, publish package to hex, etc.
 
