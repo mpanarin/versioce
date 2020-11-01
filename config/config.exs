@@ -4,7 +4,7 @@ config :versioce,
   files: ["README.md"],
   global: false,
   pre_hooks: [],
-  post_hooks: [Versioce.PostHooks.ReleaseHook]
+  post_hooks: [Versioce.PostHooks.Git.Release]
 
 config :versioce, :git,
   commit_message_template: ":clap: Bump version to {version}",
