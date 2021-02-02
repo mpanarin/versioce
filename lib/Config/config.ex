@@ -5,6 +5,10 @@ defmodule Versioce.Config do
 
   All config values take either a direct value or a function of arity 0 that will
   return the value.
+
+  Other config namespaces:
+
+  `Versioce.Config.Git`
   """
 
   import Versioce.Config.Macros, only: :macros
@@ -19,6 +23,10 @@ defmodule Versioce.Config do
     "Hooks to run after the version bumping"
 
   defmodule Git do
+    @moduledoc """
+    Configuration module for versioce git integration.
+    see `Versioce.Config` for more details
+    """
     value [:git, :dirty_add], false,
       "Whether to add all the files in `git add` or only from `Versioce.Config.files`. By default only `Versioce.Config.files`"
     value [:git, :commit_message_template], "Bump version to {version}",
