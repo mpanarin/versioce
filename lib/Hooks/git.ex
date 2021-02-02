@@ -2,12 +2,12 @@ defmodule Versioce.PostHooks.Git.Commit do
   @moduledoc """
   Runs a `git commit` in your repository.
 
-  You can customize your commit message with `Versioce.Config.commit_message_template`
+  You can customize your commit message with `Versioce.Config.Git.commit_message_template`
   """
   use Versioce.PostHook
 
   def run(version) do
-    Versioce.Config.commit_message_template()
+    Versioce.Config.Git.commit_message_template()
     |> String.replace("{version}", version, global: true)
     |> Versioce.Git.commit()
 
@@ -20,13 +20,13 @@ defmodule Versioce.PostHooks.Git.Add do
   Runs a `git add` in your repository.
 
   By default only adds files from
-  your `Versioce.Config.files`. To change that set `Versioce.Config.dirty_add`
+  your `Versioce.Config.files`. To change that set `Versioce.Config.Git.dirty_add`
   to `true`
   """
   use Versioce.PostHook
 
   def run(version) do
-    if Versioce.Config.dirty_add() do
+    if Versioce.Config.Git.dirty_add() do
       Versioce.Git.add()
     else
       ["mix.exs" | Versioce.Config.files()]
@@ -42,16 +42,16 @@ defmodule Versioce.PostHooks.Git.Tag do
   Runs `git add -a -m` in your repository.
 
   You can change the tag  template as well as tag message template with
-  `Versioce.Config.tag_template` and `Versioce.Config.tag_message_template`
+  `Versioce.Config.Git.tag_template` and `Versioce.Config.Git.tag_message_template`
   """
   use Versioce.PostHook
 
   def run(version) do
     message =
-      Versioce.Config.tag_message_template()
+      Versioce.Config.Git.tag_message_template()
       |> String.replace("{version}", version, global: true)
 
-    Versioce.Config.tag_template()
+    Versioce.Config.Git.tag_template()
     |> String.replace("{version}", version, global: true)
     |> Versioce.Git.tag(message)
 

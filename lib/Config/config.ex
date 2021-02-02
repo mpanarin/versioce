@@ -17,12 +17,15 @@ defmodule Versioce.Config do
     "Hooks to run before the version bumping"
   value :post_hooks, [],
     "Hooks to run after the version bumping"
-  value [:git, :dirty_add], false,
-    "Whether to add all the files in `git add` or only from `Versioce.Config.files`. By default only `Versioce.Config.files`"
-  value [:git, :commit_message_template], "Bump version to {version}",
-    "Template for the commit message. `{version}` will be replaced with the version you bumped to"
-  value [:git, :tag_template], "{version}",
-    "Template for the tag annotation. `{version}` will be replaced with the version you bumped to"
-  value [:git, :tag_message_template], "Release version to {version}",
-    "Template for the tag message. `{version}` will be replaced with the version you bumped to"
+
+  defmodule Git do
+    value [:git, :dirty_add], false,
+      "Whether to add all the files in `git add` or only from `Versioce.Config.files`. By default only `Versioce.Config.files`"
+    value [:git, :commit_message_template], "Bump version to {version}",
+      "Template for the commit message. `{version}` will be replaced with the version you bumped to"
+    value [:git, :tag_template], "{version}",
+      "Template for the tag annotation. `{version}` will be replaced with the version you bumped to"
+    value [:git, :tag_message_template], "Release version to {version}",
+      "Template for the tag message. `{version}` will be replaced with the version you bumped to"
+  end
 end
