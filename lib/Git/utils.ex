@@ -38,3 +38,24 @@ defmodule Versioce.Git do
     |> Git.tag!(["-a", name, "-m", message])
   end
 end
+
+
+defmodule Versioce.Git.Hook do
+	@moduledoc false
+
+  @doc false
+  defmacro __using__(_opts) do
+	  quote do
+      @doc false
+      def run(false, _) do
+        {:error, "Optional dependency `git_cli` is not loaded."}
+      end
+
+      @doc false
+	    def run(params) do
+        Code.ensure_loaded?(Git)
+        |> run(params)
+      end
+    end
+  end
+end

@@ -18,39 +18,75 @@ defmodule Mix.Tasks.Bump do
   alias Versioce.Config
 
   @preferred_cli_env :dev
+  @options [pre: :string, build: :string, no_pre_hooks: :boolean, no_post_hooks: :boolean]
 
-  defp run({:error, error} = res, _) do
-    IO.puts("Error: #{error}")
+  defp run_pre_hooks({options, params}) do
+    case Keyword.fetch(options, :no_pre_hooks) do
+      {:ok, true} -> {:ok, "No hooks to run"}
+      _ ->
+        hooks = Config.pre_hooks()
+        |> IO.inspect(label: "Running pre-hooks")
 
-    res
+        Versioce.Hooks.run(params, hooks)
+    end
   end
 
-  defp run({:ok, current_version}, params) do
-    if "--no-pre-hooks" not in params do
-      IO.inspect(Config.pre_hooks, label: "Running pre-hooks")
-      Enum.reduce(Config.pre_hooks, params, fn module, params ->
-        module.run(params)
-      end)
-    end
+  defp run_post_hooks({{options, _}, params}) do
+    case Keyword.fetch(options, :no_post_hooks) do
+      {:ok, true} -> {:ok, "No hooks to run"}
+      _ ->
+        hooks = Config.post_hooks()
+        |> IO.inspect(label: "Running post-hooks")
 
+        Versioce.Hooks.run(params, hooks)
+    end
+  end
+
+  defp bump(options, current_version) do
     IO.puts("Bumping version from #{current_version}:")
-    new_version = Bumper.bump(params, current_version)
-    |> IO.inspect
 
-    if "--no-post-hooks" not in params do
-      IO.inspect(Config.post_hooks, label: "Running post-hooks")
-      Enum.reduce(Config.post_hooks, new_version, fn module, params ->
-        module.run(params)
-      end)
-    end
+    new_version =
+      Bumper.bump(options, current_version)
+      |> IO.inspect()
 
     {:ok, new_version}
   end
 
   @doc false
-  @spec run([String.t]) :: {:ok, String.t} | {:error, String.t}
+  @spec run(
+    {OptionParser.parsed, OptionParser.argv},
+    {:ok, String.t} | {:error, String.t}
+  ) :: {:ok, String.t} | {:error, String.t}
+  def run(_, {:error, error} = res) do
+    IO.puts("Error: #{error}")
+
+    res
+  end
+
+  def run(options, {:ok, current_version}) do
+    with {:ok, _} <- run_pre_hooks(options),
+         {:ok, new_version} <- bump(options, current_version),
+         {:ok, _} <- run_post_hooks({options, new_version}) do
+      {:ok, new_version}
+    else
+      {:error, reason} -> IO.puts(reason)
+    end
+  end
+
+  @doc false
+  @spec parse([String.t]) :: {OptionParser.parsed, OptionParser.argv}
+  def parse(options) do
+    OptionParser.parse!(options, strict: @options)
+  end
+
+  @doc false
+  @spec run([String.t()]) :: {:ok, String.t()} | {:error, String.t()}
   @impl Mix.Task
-  def run(params) do
-    run(Bumper.current_version, params)
+  def run(options) do
+    Mix.Task.run("compile")
+
+    options
+    |> parse()
+    |> run(Bumper.current_version())
   end
 end

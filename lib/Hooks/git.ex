@@ -5,13 +5,14 @@ defmodule Versioce.PostHooks.Git.Commit do
   You can customize your commit message with `Versioce.Config.Git.commit_message_template`
   """
   use Versioce.PostHook
+  use Versioce.Git.Hook
 
-  def run(version) do
+  def run(true, version) do
     Versioce.Config.Git.commit_message_template()
     |> String.replace("{version}", version, global: true)
     |> Versioce.Git.commit()
 
-    version
+    {:ok, version}
   end
 end
 
@@ -24,8 +25,9 @@ defmodule Versioce.PostHooks.Git.Add do
   to `true`
   """
   use Versioce.PostHook
+  use Versioce.Git.Hook
 
-  def run(version) do
+  def run(true, version) do
     if Versioce.Config.Git.dirty_add() do
       Versioce.Git.add()
     else
@@ -33,7 +35,7 @@ defmodule Versioce.PostHooks.Git.Add do
       |> Versioce.Git.add()
     end
 
-    version
+    {:ok, version}
   end
 end
 
@@ -45,8 +47,9 @@ defmodule Versioce.PostHooks.Git.Tag do
   `Versioce.Config.Git.tag_template` and `Versioce.Config.Git.tag_message_template`
   """
   use Versioce.PostHook
+  use Versioce.Git.Hook
 
-  def run(version) do
+  def run(true, version) do
     message =
       Versioce.Config.Git.tag_message_template()
       |> String.replace("{version}", version, global: true)
@@ -55,7 +58,7 @@ defmodule Versioce.PostHooks.Git.Tag do
     |> String.replace("{version}", version, global: true)
     |> Versioce.Git.tag(message)
 
-    version
+    {:ok, version}
   end
 end
 
@@ -64,12 +67,17 @@ defmodule Versioce.PostHooks.Git.Release do
   An alias for: `Versioce.PostHooks.Git.Add`, `Versioce.PostHooks.Git.Commit`, `Versioce.PostHooks.Git.Tag`
   """
   use Versioce.PostHook
+  use Versioce.Git.Hook
+
   alias Versioce.PostHooks.Git
 
-  def run(version) do
-    version
-    |> Git.Add.run()
-    |> Git.Commit.run()
-    |> Git.Tag.run()
+  def run(true, version) do
+    with {:ok, version} <- Git.Add.run(version),
+         {:ok, version} <- Git.Commit.run(version),
+         {:ok, version} <- Git.Tag.run(version) do
+      {:ok, version}
+    else
+      _ -> {:error, "Couldn't create a tag"}
+    end
   end
 end

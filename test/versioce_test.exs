@@ -14,6 +14,20 @@ defmodule VersioceTest do
 
   describe "Version bumping task" do
 
+    test "No bumping if we couldn't get current_version" do
+      Application.put_all_env([
+        {:versioce, [
+            {:pre_hooks, [Versioce.PreHooks.Inspect]},
+            {:post_hooks, []},
+          ]}
+      ])
+      assert capture_io(fn ->
+        Mix.Tasks.Bump.run(["0.1.1"], {:error, "no current version"})
+      end) == """
+      Error: no current version
+      """
+    end
+
     test "No hooks, only bump", fixture do
       Application.put_all_env([
         {:versioce, [
@@ -90,6 +104,64 @@ defmodule VersioceTest do
       Running pre-hooks: []
       Bumping version from #{fixture.current_version}:
       "0.1.0"
+      """
+    end
+
+    test "Bumping with errors in pre hooks" do
+      Application.put_all_env([
+        {:versioce, [
+            {:pre_hooks, [Versioce.TestHelper.FailingHook]},
+            {:post_hooks, []},
+          ]}
+      ])
+      assert capture_io(fn -> Mix.Task.rerun("bump", ["0.1.0"]) end) == """
+      Running pre-hooks: [Versioce.TestHelper.FailingHook]
+      Hook failed
+      """
+    end
+
+    test "Bumping with errors in post hooks", fixture do
+      Application.put_all_env([
+        {:versioce, [
+            {:pre_hooks, []},
+            {:post_hooks, [Versioce.TestHelper.FailingHook]},
+          ]}
+      ])
+      assert capture_io(fn -> Mix.Task.rerun("bump", ["0.1.0"]) end) == """
+      Running pre-hooks: []
+      Bumping version from #{fixture.current_version}:
+      "0.1.0"
+      Running post-hooks: [Versioce.TestHelper.FailingHook]
+      Hook failed
+      """
+    end
+
+    test "Pre hooks pipeline stops on error" do
+      Application.put_all_env([
+        {:versioce, [
+            {:pre_hooks, [Versioce.TestHelper.FailingHook, Versioce.PreHooks.Inspect]},
+            {:post_hooks, []},
+          ]}
+      ])
+      assert capture_io(fn -> Mix.Task.rerun("bump", ["0.1.0"]) end) == """
+      Running pre-hooks: [Versioce.TestHelper.FailingHook, Versioce.PreHooks.Inspect]
+      Hook failed
+      """
+    end
+
+    test "Post hooks pipeline stops on error", fixture do
+      Application.put_all_env([
+        {:versioce, [
+            {:pre_hooks, []},
+            {:post_hooks, [Versioce.TestHelper.FailingHook, Versioce.PostHooks.Inspect]},
+          ]}
+      ])
+      assert capture_io(fn -> Mix.Task.rerun("bump", ["0.1.0"]) end) == """
+      Running pre-hooks: []
+      Bumping version from #{fixture.current_version}:
+      "0.1.0"
+      Running post-hooks: [Versioce.TestHelper.FailingHook, Versioce.PostHooks.Inspect]
+      Hook failed
       """
     end
   end

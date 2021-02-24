@@ -1,29 +1,37 @@
 defmodule VersioceTest.Bumper do
   use ExUnit.Case, async: true
   alias Versioce.Bumper
+  import ExUnit.CaptureIO
+
+
+  defp helper_bump(options, version) do
+    options
+    |> Mix.Tasks.Bump.parse()
+    |> Bumper.bump(version)
+  end
 
   defp test_versioning(binding, new_vers) do
     vers = "0.1.0"
-    assert Bumper.bump([binding], vers) == new_vers
+    assert helper_bump([binding], vers) == new_vers
   end
 
   defp test_build_pre(binding, new_vers) do
     vers = "0.1.0"
-    assert Bumper.bump([binding, "--pre", "alpha"], vers) == new_vers <> "-alpha"
-    assert Bumper.bump([binding, "--pre", "alpha.3.spam-eggs"], vers) == new_vers <> "-alpha.3.spam-eggs"
+    assert helper_bump([binding, "--pre", "alpha"], vers) == new_vers <> "-alpha"
+    assert helper_bump([binding, "--pre", "alpha.3.spam-eggs"], vers) == new_vers <> "-alpha.3.spam-eggs"
 
-    assert Bumper.bump([binding, "--build", "foo"], vers) == new_vers <> "+foo"
-    assert Bumper.bump([binding, "--build", "foo.3.spam-eggs"], vers) == new_vers <> "+foo.3.spam-eggs"
-    assert Bumper.bump([binding, "--build", "bar.50-6"], vers) == new_vers <> "+bar.50-6"
+    assert helper_bump([binding, "--build", "foo"], vers) == new_vers <> "+foo"
+    assert helper_bump([binding, "--build", "foo.3.spam-eggs"], vers) == new_vers <> "+foo.3.spam-eggs"
+    assert helper_bump([binding, "--build", "bar.50-6"], vers) == new_vers <> "+bar.50-6"
 
-    assert Bumper.bump([binding, "--pre", "alpha", "--build", "foo"], vers) == new_vers <>"-alpha+foo"
-    assert Bumper.bump([binding, "--pre", "alpha.1.test-test", "--build", "foo.1.-bar"], vers) == new_vers <>"-alpha.1.test-test+foo.1.-bar"
+    assert helper_bump([binding, "--pre", "alpha", "--build", "foo"], vers) == new_vers <>"-alpha+foo"
+    assert helper_bump([binding, "--pre", "alpha.1.test-test", "--build", "foo.1.-bar"], vers) == new_vers <>"-alpha.1.test-test+foo.1.-bar"
 
     assert_raise Version.InvalidVersionError, fn ->
-      Bumper.bump([binding, "--build", "foo[]"], vers)
+      helper_bump([binding, "--build", "foo[]"], vers)
     end
     assert_raise Version.InvalidVersionError, fn ->
-      Bumper.bump([binding, "--pre", "foo[]"], vers)
+      helper_bump([binding, "--pre", "foo[]"], vers)
     end
   end
 
@@ -40,7 +48,9 @@ defmodule VersioceTest.Bumper do
   describe "Test version bumping:" do
 
     test "Nothing specified" do
-      assert Bumper.bump([], "0.1.0") == "0.1.0"
+      assert capture_io(fn ->
+        assert helper_bump([], "0.1.0") == "0.1.0"
+      end) == "Nothing to do\n"
     end
 
     test "Bump with patch" do
@@ -59,23 +69,23 @@ defmodule VersioceTest.Bumper do
 
     test "Bump to specific" do
       vers = "0.1.0"
-      assert Bumper.bump(["2.3.3"], vers) == "2.3.3"
+      assert helper_bump(["2.3.3"], vers) == "2.3.3"
 
-      assert Bumper.bump(["2.3.3-foo"], vers) == "2.3.3-foo"
-      assert Bumper.bump(["2.3.3+bar"], vers) == "2.3.3+bar"
-      assert Bumper.bump(["2.3.3-foo+bar"], vers) == "2.3.3-foo+bar"
-      assert Bumper.bump(["2.3.3-foo.3-1+bar.50-6"], vers) == "2.3.3-foo.3-1+bar50-6"
+      assert helper_bump(["2.3.3-foo"], vers) == "2.3.3-foo"
+      assert helper_bump(["2.3.3+bar"], vers) == "2.3.3+bar"
+      assert helper_bump(["2.3.3-foo+bar"], vers) == "2.3.3-foo+bar"
+      assert helper_bump(["2.3.3-foo.3-1+bar.50-6"], vers) == "2.3.3-foo.3-1+bar50-6"
 
       assert_raise Version.InvalidVersionError, fn ->
-        Bumper.bump(["2.3.3-foo[]"], vers)
+        helper_bump(["2.3.3-foo[]"], vers)
       end
     end
 
     test "Only adding pre or build" do
       vers = "0.1.0"
-      assert Bumper.bump(["--pre", "foo"], vers) == vers <> "-foo"
-      assert Bumper.bump(["--build", "foo"], vers) == vers <> "+foo"
-      assert Bumper.bump(["--pre", "foo", "--build", "bar"], vers) == vers <> "-foo+bar"
+      assert helper_bump(["--pre", "foo"], vers) == vers <> "-foo"
+      assert helper_bump(["--build", "foo"], vers) == vers <> "+foo"
+      assert helper_bump(["--pre", "foo", "--build", "bar"], vers) == vers <> "-foo+bar"
     end
   end
 end
