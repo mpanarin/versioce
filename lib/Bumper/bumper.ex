@@ -1,6 +1,4 @@
 defmodule Versioce.Bumper do
-  @options [pre: :string, build: :string, no_pre_hooks: :boolean, no_post_hooks: :boolean]
-
   @moduledoc """
   Module responsible for the bumping itself.
 
@@ -43,12 +41,21 @@ defmodule Versioce.Bumper do
     })
   end
 
-  defp do_bump({[], []}, from) do
+  @doc """
+  Bumps versions in all the files specified in config + mix.exs
+
+  ## Example
+
+      iex> Versioce.Bumper.bump({[], ["minor"]}, "0.0.1")
+      "0.1.0"
+  """
+  @spec bump({OptionParser.parsed, OptionParser.argv}, String.t) :: String.t
+  def bump({[], []}, from) do
     IO.puts("Nothing to do")
     from
   end
 
-  defp do_bump({options, ["patch"]}, from) do
+  def bump({options, ["patch"]}, from) do
     from_v = Version.parse!(from)
 
     new_version =
@@ -64,7 +71,7 @@ defmodule Versioce.Bumper do
     new_version
   end
 
-  defp do_bump({options, ["minor"]}, from) do
+  def bump({options, ["minor"]}, from) do
     from_v = Version.parse!(from)
 
     new_version =
@@ -81,7 +88,7 @@ defmodule Versioce.Bumper do
     new_version
   end
 
-  defp do_bump({options, ["major"]}, from) do
+  def bump({options, ["major"]}, from) do
     from_v = Version.parse!(from)
 
     new_version =
@@ -99,14 +106,14 @@ defmodule Versioce.Bumper do
     new_version
   end
 
-  defp do_bump({_, [version]}, from) do
+  def bump({_, [version]}, from) do
     new_version = Version.parse!(version) |> to_string
 
     Versioce.Bumper.Files.update_version_files(from, new_version)
     new_version
   end
 
-  defp do_bump({options, []}, from) do
+  def bump({options, []}, from) do
     from_v = Version.parse!(from)
 
     new_version =
@@ -116,19 +123,5 @@ defmodule Versioce.Bumper do
 
     Versioce.Bumper.Files.update_version_files(from, new_version)
     new_version
-  end
-
-  @doc """
-  Bumps versions in all the files specified in config + mix.exs
-
-  ## Example
-
-      iex> Versioce.Bumper.bump(["minor"], "0.0.1")
-      "0.1.0"
-  """
-  @spec bump([String.t], String.t) :: String.t
-  def bump(options, from) do
-    OptionParser.parse!(options, strict: @options)
-    |> do_bump(from)
   end
 end
