@@ -22,10 +22,13 @@ defmodule Mix.Tasks.Bump do
 
   defp run_pre_hooks({options, params}) do
     case Keyword.fetch(options, :no_pre_hooks) do
-      {:ok, true} -> {:ok, "No hooks to run"}
+      {:ok, true} ->
+        {:ok, "No hooks to run"}
+
       _ ->
-        hooks = Config.pre_hooks()
-        |> IO.inspect(label: "Running pre-hooks")
+        hooks =
+          Config.pre_hooks()
+          |> IO.inspect(label: "Running pre-hooks")
 
         Versioce.Hooks.run(params, hooks)
     end
@@ -33,10 +36,13 @@ defmodule Mix.Tasks.Bump do
 
   defp run_post_hooks({{options, _}, params}) do
     case Keyword.fetch(options, :no_post_hooks) do
-      {:ok, true} -> {:ok, "No hooks to run"}
+      {:ok, true} ->
+        {:ok, "No hooks to run"}
+
       _ ->
-        hooks = Config.post_hooks()
-        |> IO.inspect(label: "Running post-hooks")
+        hooks =
+          Config.post_hooks()
+          |> IO.inspect(label: "Running post-hooks")
 
         Versioce.Hooks.run(params, hooks)
     end
@@ -54,9 +60,9 @@ defmodule Mix.Tasks.Bump do
 
   @doc false
   @spec run(
-    {OptionParser.parsed, OptionParser.argv},
-    {:ok, String.t} | {:error, String.t}
-  ) :: {:ok, String.t} | {:error, String.t}
+          {OptionParser.parsed(), OptionParser.argv()},
+          {:ok, String.t()} | {:error, String.t()}
+        ) :: {:ok, String.t()} | {:error, String.t()}
   def run(_, {:error, error} = res) do
     IO.puts("Error: #{error}")
 
@@ -74,7 +80,7 @@ defmodule Mix.Tasks.Bump do
   end
 
   @doc false
-  @spec parse([String.t]) :: {OptionParser.parsed, OptionParser.argv}
+  @spec parse([String.t()]) :: {OptionParser.parsed(), OptionParser.argv()}
   def parse(options) do
     OptionParser.parse!(options, strict: @options)
   end

@@ -6,7 +6,7 @@ defmodule Versioce.PreHooks.Inspect do
   """
   use Versioce.PreHook
 
-	def run(args) do
+  def run(args) do
     IO.inspect(args)
     {:ok, args}
   end
@@ -20,7 +20,7 @@ defmodule Versioce.PostHooks.Inspect do
   """
   use Versioce.PostHook
 
-	def run(version) do
+  def run(version) do
     IO.inspect(version)
     {:ok, version}
   end

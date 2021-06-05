@@ -25,12 +25,12 @@ defmodule Versioce.PreHook do
   a list of command line args for `bump` task.
   It should return them in form `{:ok, args} | {:error, reason}`
   """
-	@callback run([String.t]) :: {:ok, [String.t]} | {:error, String.t}
+  @callback run([String.t()]) :: {:ok, [String.t()]} | {:error, String.t()}
 
   @doc false
   defmacro __using__(_opts) do
-	  quote do
-	    @behaviour Versioce.PreHook
+    quote do
+      @behaviour Versioce.PreHook
     end
   end
 end
@@ -62,16 +62,15 @@ defmodule Versioce.PostHook do
   the new version of the project.
   It should return it in form `{:ok, version} | {:error, reason}`
   """
-	@callback run(String.t) :: {:ok, String.t} | {:error, String.t}
+  @callback run(String.t()) :: {:ok, String.t()} | {:error, String.t()}
 
   @doc false
   defmacro __using__(_opts) do
-	  quote do
-	    @behaviour Versioce.PostHook
+    quote do
+      @behaviour Versioce.PostHook
     end
   end
 end
-
 
 defmodule Versioce.OK do
   @moduledoc false
@@ -88,12 +87,12 @@ defmodule Versioce.OK do
   def unit(value), do: {:ok, value}
 end
 
-
 defmodule Versioce.Hooks do
   @moduledoc false
 
   @spec run(any, [module()]) :: Versioce.OK.ok_tuple()
   def run(params, []), do: Versioce.OK.unit(params)
+
   def run(params, hooks) do
     [h | tail] = hooks
 

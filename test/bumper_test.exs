@@ -3,7 +3,6 @@ defmodule VersioceTest.Bumper do
   alias Versioce.Bumper
   import ExUnit.CaptureIO
 
-
   defp helper_bump(options, version) do
     options
     |> Mix.Tasks.Bump.parse()
@@ -18,18 +17,27 @@ defmodule VersioceTest.Bumper do
   defp test_build_pre(binding, new_vers) do
     vers = "0.1.0"
     assert helper_bump([binding, "--pre", "alpha"], vers) == new_vers <> "-alpha"
-    assert helper_bump([binding, "--pre", "alpha.3.spam-eggs"], vers) == new_vers <> "-alpha.3.spam-eggs"
+
+    assert helper_bump([binding, "--pre", "alpha.3.spam-eggs"], vers) ==
+             new_vers <> "-alpha.3.spam-eggs"
 
     assert helper_bump([binding, "--build", "foo"], vers) == new_vers <> "+foo"
-    assert helper_bump([binding, "--build", "foo.3.spam-eggs"], vers) == new_vers <> "+foo.3.spam-eggs"
+
+    assert helper_bump([binding, "--build", "foo.3.spam-eggs"], vers) ==
+             new_vers <> "+foo.3.spam-eggs"
+
     assert helper_bump([binding, "--build", "bar.50-6"], vers) == new_vers <> "+bar.50-6"
 
-    assert helper_bump([binding, "--pre", "alpha", "--build", "foo"], vers) == new_vers <>"-alpha+foo"
-    assert helper_bump([binding, "--pre", "alpha.1.test-test", "--build", "foo.1.-bar"], vers) == new_vers <>"-alpha.1.test-test+foo.1.-bar"
+    assert helper_bump([binding, "--pre", "alpha", "--build", "foo"], vers) ==
+             new_vers <> "-alpha+foo"
+
+    assert helper_bump([binding, "--pre", "alpha.1.test-test", "--build", "foo.1.-bar"], vers) ==
+             new_vers <> "-alpha.1.test-test+foo.1.-bar"
 
     assert_raise Version.InvalidVersionError, fn ->
       helper_bump([binding, "--build", "foo[]"], vers)
     end
+
     assert_raise Version.InvalidVersionError, fn ->
       helper_bump([binding, "--pre", "foo[]"], vers)
     end
@@ -46,11 +54,10 @@ defmodule VersioceTest.Bumper do
   end
 
   describe "Test version bumping:" do
-
     test "Nothing specified" do
       assert capture_io(fn ->
-        assert helper_bump([], "0.1.0") == "0.1.0"
-      end) == "Nothing to do\n"
+               assert helper_bump([], "0.1.0") == "0.1.0"
+             end) == "Nothing to do\n"
     end
 
     test "Bump with patch" do
@@ -62,6 +69,7 @@ defmodule VersioceTest.Bumper do
       test_versioning("minor", "0.2.0")
       test_build_pre("minor", "0.2.0")
     end
+
     test "Bump with major" do
       test_versioning("major", "1.0.0")
       test_build_pre("major", "1.0.0")

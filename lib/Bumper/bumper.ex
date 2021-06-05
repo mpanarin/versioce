@@ -14,7 +14,7 @@ defmodule Versioce.Bumper do
       iex> Versioce.Bumper.current_version
       {:ok, "0.1.0"}
   """
-  @spec current_version() :: {:ok, String.t} | {:error, String.t}
+  @spec current_version() :: {:ok, String.t()} | {:error, String.t()}
   def current_version do
     case Mix.Project.get() do
       nil -> {:error, "No project configured"}
@@ -49,7 +49,7 @@ defmodule Versioce.Bumper do
       iex> Versioce.Bumper.bump({[], ["minor"]}, "0.0.1")
       "0.1.0"
   """
-  @spec bump({OptionParser.parsed, OptionParser.argv}, String.t) :: String.t
+  @spec bump({OptionParser.parsed(), OptionParser.argv()}, String.t()) :: String.t()
   def bump({[], []}, from) do
     IO.puts("Nothing to do")
     from

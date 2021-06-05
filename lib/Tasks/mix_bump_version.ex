@@ -14,7 +14,7 @@ defmodule Mix.Tasks.Bump.Version do
 
   @doc false
   def run(_) do
-    {_, text} = Versioce.Bumper.current_version
+    {_, text} = Versioce.Bumper.current_version()
 
     IO.puts(text)
   end

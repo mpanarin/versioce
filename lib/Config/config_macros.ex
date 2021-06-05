@@ -51,6 +51,7 @@ defmodule Versioce.Config.Macros do
   defmacro value(path, default, doc) when is_list(path) do
     h = List.first(path)
     t = List.last(path)
+
     quote do
       @doc """
       Get config value for #{to_string(unquote(t))}
@@ -81,5 +82,4 @@ defmodule Versioce.Config.Macros do
       end
     end
   end
-
 end
