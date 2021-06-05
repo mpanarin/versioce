@@ -68,7 +68,8 @@ defmodule Versioce.MixProject do
       source_ref: "v#{@version}",
       extras: [
         "README.md",
-        "docs/available_hooks.md"
+        "docs/available_hooks.md",
+        "docs/migrations.md"
       ]
     ]
   end
