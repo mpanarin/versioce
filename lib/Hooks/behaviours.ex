@@ -72,31 +72,22 @@ defmodule Versioce.PostHook do
   end
 end
 
-defmodule Versioce.OK do
+defmodule Versioce.Git.Hook do
   @moduledoc false
 
-  @type ok_tuple :: {:ok, any} | {:error, any}
+  @doc false
+  defmacro __using__(_opts) do
+    quote do
+      @doc false
+      defp run(false, _) do
+        {:error, "Optional dependency `git_cli` is not loaded."}
+      end
 
-  @spec bind(ok_tuple, fun) :: ok_tuple()
-  def bind({:ok, value}, func), do: func.(value)
-  def bind({:error, reason}, _), do: {:error, reason}
-
-  @spec unit(any) :: ok_tuple()
-  def unit({:ok, _} = value), do: value
-  def unit({:error, _} = value), do: value
-  def unit(value), do: {:ok, value}
-end
-
-defmodule Versioce.Hooks do
-  @moduledoc false
-
-  @spec run(any, [module()]) :: Versioce.OK.ok_tuple()
-  def run(params, []), do: Versioce.OK.unit(params)
-
-  def run(params, [h | tail]) do
-    params
-    |> Versioce.OK.unit()
-    |> Versioce.OK.bind(&h.run/1)
-    |> run(tail)
+      @doc false
+      def run(params) do
+        Code.ensure_loaded?(Git)
+        |> run(params)
+      end
+    end
   end
 end
