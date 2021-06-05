@@ -93,9 +93,7 @@ defmodule Versioce.Hooks do
   @spec run(any, [module()]) :: Versioce.OK.ok_tuple()
   def run(params, []), do: Versioce.OK.unit(params)
 
-  def run(params, hooks) do
-    [h | tail] = hooks
-
+  def run(params, [h | tail]) do
     params
     |> Versioce.OK.unit()
     |> Versioce.OK.bind(&h.run/1)

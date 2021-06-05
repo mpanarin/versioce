@@ -46,7 +46,7 @@ defmodule Versioce.Git.Hook do
   defmacro __using__(_opts) do
     quote do
       @doc false
-      def run(false, _) do
+      defp run(false, _) do
         {:error, "Optional dependency `git_cli` is not loaded."}
       end
 
