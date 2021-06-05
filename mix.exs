@@ -26,7 +26,7 @@ defmodule Versioce.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
-        "coveralls.json": :test,
+        "coveralls.json": :test
       ]
     ]
   end
@@ -57,7 +57,7 @@ defmodule Versioce.MixProject do
       {:ex_doc, "~> 0.22", only: [:release, :dev]},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
-      {:git_cli, "~> 0.3.0", optional: true},
+      {:git_cli, "~> 0.3.0", optional: true}
     ]
   end
 
@@ -68,7 +68,7 @@ defmodule Versioce.MixProject do
       source_ref: "v#{@version}",
       extras: [
         "README.md",
-        "docs/available_hooks.md",
+        "docs/available_hooks.md"
       ]
     ]
   end
