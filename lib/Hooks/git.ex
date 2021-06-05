@@ -7,7 +7,7 @@ defmodule Versioce.PostHooks.Git.Commit do
   use Versioce.PostHook
   use Versioce.Git.Hook
 
-  def run(true, version) do
+  defp run(true, version) do
     Versioce.Config.Git.commit_message_template()
     |> String.replace("{version}", version, global: true)
     |> Versioce.Git.commit()
@@ -27,7 +27,7 @@ defmodule Versioce.PostHooks.Git.Add do
   use Versioce.PostHook
   use Versioce.Git.Hook
 
-  def run(true, version) do
+  defp run(true, version) do
     if Versioce.Config.Git.dirty_add() do
       Versioce.Git.add()
     else
@@ -49,7 +49,7 @@ defmodule Versioce.PostHooks.Git.Tag do
   use Versioce.PostHook
   use Versioce.Git.Hook
 
-  def run(true, version) do
+  defp run(true, version) do
     message =
       Versioce.Config.Git.tag_message_template()
       |> String.replace("{version}", version, global: true)
@@ -71,13 +71,13 @@ defmodule Versioce.PostHooks.Git.Release do
 
   alias Versioce.PostHooks.Git
 
-  def run(true, version) do
+  defp run(true, version) do
     with {:ok, version} <- Git.Add.run(version),
          {:ok, version} <- Git.Commit.run(version),
          {:ok, version} <- Git.Tag.run(version) do
       {:ok, version}
     else
-      _ -> {:error, "Couldn't create a tag"}
+      error -> {:error, "Error occured: #{inspect(error)}"}
     end
   end
 end
