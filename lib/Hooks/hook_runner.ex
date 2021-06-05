@@ -1,13 +1,13 @@
 defmodule Versioce.Hooks do
   @moduledoc false
+  import Versioce.OK, only: :macros
 
-  @spec run(any, [module()]) :: Versioce.OK.ok_tuple()
+  @spec run(any, [module()]) :: Versioce.OK.t()
   def run(params, []), do: Versioce.OK.unit(params)
 
-  def run(params, [h | tail]) do
+  def run(params, [hook | hooks]) do
     params
-    |> Versioce.OK.unit()
-    |> Versioce.OK.bind(&h.run/1)
-    |> run(tail)
+    ~>> hook.run
+    |> run(hooks)
   end
 end
