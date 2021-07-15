@@ -16,7 +16,9 @@ defmodule Versioce.Changelog.DataGrabber.Git do
     with true <- Utils.deps_loaded?([Git]) do
       {
         :ok,
-        get_commit_groups(new_version)
+        new_version
+        |> get_new_version_name()
+        |> get_commit_groups()
         |> prepare_group_sections(Config.Changelog.anchors())
       }
     else
@@ -25,6 +27,9 @@ defmodule Versioce.Changelog.DataGrabber.Git do
          "Optional dependency `git_cli` is not loaded. It is required for Git Datagrabber"}
     end
   end
+
+  defp get_new_version_name("HEAD"), do: "HEAD"
+  defp get_new_version_name(name), do: name |> VGit.get_tag_name()
 
   defp prepare_group_sections(groups, anchors) do
     make_groups(groups, anchors, [])

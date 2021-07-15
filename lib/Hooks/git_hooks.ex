@@ -43,7 +43,7 @@ defmodule Versioce.PostHooks.Git.Tag do
   @moduledoc """
   Runs `git add -a -m` in your repository.
 
-  You can change the tag  template as well as tag message template with
+  You can change the tag template as well as tag message template with
   `Versioce.Config.Git.tag_template/0` and `Versioce.Config.Git.tag_message_template/0`
   """
   use Versioce.PostHook
@@ -54,8 +54,8 @@ defmodule Versioce.PostHooks.Git.Tag do
       Versioce.Config.Git.tag_message_template()
       |> String.replace("{version}", version, global: true)
 
-    Versioce.Config.Git.tag_template()
-    |> String.replace("{version}", version, global: true)
+    version
+    |> Versioce.Git.get_tag_name()
     |> Versioce.Git.tag(message)
 
     {:ok, version}

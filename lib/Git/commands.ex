@@ -98,4 +98,13 @@ defmodule Versioce.Git do
       }
     end)
   end
+
+  @doc """
+  Generate tag name according to `Versioce.Config.Git.tag_template/0`.
+  """
+  @spec get_tag_name(String.t()) :: String.t()
+  def get_tag_name(version_name) do
+    Versioce.Config.Git.tag_template()
+    |> String.replace("{version}", version_name, global: true)
+  end
 end
