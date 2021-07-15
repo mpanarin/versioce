@@ -30,7 +30,6 @@ config :versioce, :changelog,
     security: [":rotating_light:"]
   },
   unanchored_section: :uncategorised,
-  keepachangelog_semantic: false,
   git_origin: Mix.Project.config()[:source_url]
 
 import_config("#{Mix.env()}.exs")
