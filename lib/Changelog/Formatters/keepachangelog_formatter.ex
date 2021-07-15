@@ -34,12 +34,9 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
      # Changelog
      All notable changes to this project will be documented in this file.
 
-     The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
-     #{
+     The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)#{
        if Versioce.Config.Changelog.keepachangelog_semantic() do
-         "This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)"
-       else
-         ""
+         "\nThis project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)"
        end
      }
      """}
@@ -102,26 +99,33 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
   @doc """
   Generate keepachangelog footer.
 
-  Requires the optional dependency `git_cli`
+  Requires the optional dependency `git_cli`.
+  Can be skipped by setting `Versioce.Config.Changelog.git_origin/0` to `nil`.
   """
   @spec make_footer(Versions.t()) :: {:ok | :error, String.t()}
   def make_footer(versions) do
     with true <- Utils.deps_loaded?([Git]) do
-      {
-        :ok,
-        versions
-        |> version_names()
-        |> Kernel.++([Versioce.Git.initial_commit()])
-        |> Stream.chunk_every(2, 1, :discard)
-        |> Stream.map(&make_footer_line/1)
-        |> Enum.to_list()
-        |> Enum.join("\n")
-      }
+      make_footer(versions, Config.Changelog.git_origin())
     else
       false ->
         {:error,
          "Optional dependency `git_cli` is not loaded. It is required for Keepachangelog footer"}
     end
+  end
+
+  defp make_footer(_versions, nil), do: {:ok, ""}
+
+  defp make_footer(versions, _git_origin) do
+    {
+      :ok,
+      versions
+      |> version_names()
+      |> Kernel.++([Versioce.Git.initial_commit()])
+      |> Stream.chunk_every(2, 1, :discard)
+      |> Stream.map(&make_footer_line/1)
+      |> Enum.to_list()
+      |> Enum.join("\n")
+    }
   end
 
   @spec version_names(versions :: Versions.t()) :: [String.t()]
