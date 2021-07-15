@@ -44,7 +44,7 @@ config :versioce,
   post_hooks: [Versioce.PostHooks.Git.Add],
 ```
 
-By default only adds files from `Versioce.Config.files` parameter in versioce config.\
+By default only adds files from `Versioce.Config.files/0` parameter in versioce config.\
 You can enable dirty add in configuration:
 ```elixir
 config :versioce, :git,
@@ -74,4 +74,15 @@ You can add it to your post_hooks in the config.
 ```elixir
 config :versioce,
   post_hooks: [Versioce.PostHooks.Git.Release],
+```
+### `Versioce.PostHooks.Changelog`
+Generates a changelog file at `Versioce.Config.Changelog.changelog_file/0`.\
+There is a lot of configuration for the changelog generation, see `Versioce.Config.Changelog` for all the options.
+
+By default this hook uses `Versioce.Changelog.Datagrabber.Git` datagrabber and `Versioce.Changelog.Formatter.Keepachangelog` formatter, using your git history to generate changelog.
+You can change or write your own Formatter(`Versioce.Changelog.Formatter`) or Datagrabber(`Versioce.Changelog.Datagrabber`) and set them in config
+```elixir
+config :versioce, :changelog,
+  datagrabber: Versioce.Changelog.DataGrabber.Git,        # Or your own datagrabber
+  formatter: Versioce.Changelog.Formatter.Keepachangelog  # Or your own formatter
 ```

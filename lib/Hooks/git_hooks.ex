@@ -2,7 +2,7 @@ defmodule Versioce.PostHooks.Git.Commit do
   @moduledoc """
   Runs a `git commit` in your repository.
 
-  You can customize your commit message with `Versioce.Config.Git.commit_message_template`
+  You can customize your commit message with `Versioce.Config.Git.commit_message_template/0`
   """
   use Versioce.PostHook
   use Versioce.Git.Hook
@@ -21,7 +21,7 @@ defmodule Versioce.PostHooks.Git.Add do
   Runs a `git add` in your repository.
 
   By default only adds files from
-  your `Versioce.Config.files`. To change that set `Versioce.Config.Git.dirty_add`
+  your `Versioce.Config.files/0`. To change that set `Versioce.Config.Git.dirty_add/0`
   to `true`
   """
   use Versioce.PostHook
@@ -31,7 +31,7 @@ defmodule Versioce.PostHooks.Git.Add do
     if Versioce.Config.Git.dirty_add() do
       Versioce.Git.add()
     else
-      ["mix.exs" | Versioce.Config.files()]
+      ["mix.exs" | Versioce.Config.files() ++ Versioce.Config.Git.additional_files()]
       |> Versioce.Git.add()
     end
 
@@ -44,7 +44,7 @@ defmodule Versioce.PostHooks.Git.Tag do
   Runs `git add -a -m` in your repository.
 
   You can change the tag  template as well as tag message template with
-  `Versioce.Config.Git.tag_template` and `Versioce.Config.Git.tag_message_template`
+  `Versioce.Config.Git.tag_template/0` and `Versioce.Config.Git.tag_message_template/0`
   """
   use Versioce.PostHook
   use Versioce.Git.Hook

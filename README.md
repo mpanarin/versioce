@@ -8,6 +8,20 @@ This is a mix task to bump version of your project.
 Versioce includes batteries that are customizable for your liking.
 It is heavily inspired by [bumpversion](https://github.com/peritus/bumpversion).
 
+## Quick links
+- [Installation](#installation)
+- [Migrating from older versions](#migrating-from-older-versions)
+- [Usage](#usage)
+  - [Configure the files](#configure-the-files)
+  - [Configure Hooks](#configure-hooks)
+    - [Pre Hooks](#pre-hooks)
+    - [Post Hooks](#post-hooks)
+  - [Bump your versions!](#bump-your-versions)
+  - [Changelog generation](#changelog-generation)
+- [The name](#the-name)
+- [Similar projects](#similar-projects)
+- [Some acknowledgments](#some-acknowledgments)
+
 ## Installation
 
 The [package](https://hex.pm/packages/versioce) can be installed by adding `versioce` to your list of dependencies in `mix.exs`:
@@ -166,6 +180,41 @@ Bumping version from 0.1.1-alpha.3:
 Running post-hooks: []
 Done.
 ```
+
+### Changelog generation
+
+Versioce has the functionality to generate changelogs. By default it produces a changlog in the [Keepachangelog](https://keepachangelog.com/en/1.0.0/) format
+from your Git history, but both can be configured:
+``` elixir
+config :versioce, :changelog,
+  datagrabber: Versioce.Changelog.DataGrabber.Git,        # Or your own datagrabber module
+  formatter: Versioce.Changelog.Formatter.Keepachangelog  # Or your own formatter module
+```
+Make sure to set the proper anchors configuration according to your repository policies, so Versioce can place entries in the proper sections:
+
+``` elixir
+config :versioce, :changelog,
+  anchors:
+      %{
+        added: ["[ADD]"],
+        changed: ["[IMP]"],
+        deprecated: ["[DEP]"],
+        removed: ["[REM]"],
+        fixed: ["[FIXED]"],
+        security: ["[SEC]"]
+      }
+```
+> Anchors definition should follow the `Versioce.Changelog.Anchors` struct format. As it will be converted to it down the line.
+
+And your are all set!
+Now you can either run a `mix changelog` task to generate a changelog file
+or add `Versioce.PostHooks.Changelog` post hook in your configuration:
+``` elixir
+config :versioce,
+  post_hooks: [Versioce.PostHooks.Changelog],
+```
+> *Important*: If you want to use this hook in combination with `Versioce.PostHooks.Git.Release`, make sure that changelog is *before* the release hook, as well as either `Versioce.Config.Git.dirty_add/0` is enabled or your changelog file is added to `Versioce.Config.Git.additional_files/0`\
+> Make sure to check other configurations for the changelog generation in `Versioce.Config.Changelog`
 
 ## The name
 
