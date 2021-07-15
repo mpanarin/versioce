@@ -85,7 +85,7 @@ defmodule Versioce.Git.Hook do
 
       @doc false
       def run(params) do
-        Code.ensure_loaded?(Git)
+        Versioce.Utils.deps_loaded?([Git])
         |> run(params)
       end
     end

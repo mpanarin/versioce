@@ -27,3 +27,4 @@ versioce-*.tar
 /priv/plts/*.plt.hash
 
 TODO.org
+.DS_Store
