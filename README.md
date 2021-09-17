@@ -206,7 +206,7 @@ config :versioce, :changelog,
 ```
 > Anchors definition should follow the `Versioce.Changelog.Anchors` struct format. As it will be converted to it down the line.
 
-And your are all set!
+And you're all set!
 Now you can either run a `mix changelog` task to generate a changelog file
 or add `Versioce.PostHooks.Changelog` post hook in your configuration:
 ``` elixir
