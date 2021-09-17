@@ -13,7 +13,8 @@ defmodule Versioce.Changelog.DataGrabber.Git do
 
   @impl Versioce.Changelog.DataGrabber
   def get_data(new_version \\ "HEAD") do
-    with true <- Utils.deps_loaded?([Git]) do
+    with true <- Utils.deps_loaded?([Git]),
+         [_tags] <- VGit.get_tags() do
       {
         :ok,
         new_version
@@ -22,6 +23,9 @@ defmodule Versioce.Changelog.DataGrabber.Git do
         |> prepare_group_sections(Config.Changelog.anchors())
       }
     else
+      [] ->
+        {:error, "No project tags found, please tag your release"}
+
       false ->
         {:error,
          "Optional dependency `git_cli` is not loaded. It is required for Git Datagrabber"}
