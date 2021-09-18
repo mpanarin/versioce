@@ -1,6 +1,7 @@
 defmodule VersioceTest.Changelog.Formatters.Keepachangelog do
   use ExUnit.Case, async: false
   alias Versioce.Changelog.Formatter.Keepachangelog
+  alias Versioce.Changelog.Sections
 
   setup do
     Application.put_env(:versioce, :changelog, [
@@ -11,7 +12,7 @@ defmodule VersioceTest.Changelog.Formatters.Keepachangelog do
 
     versions = [
       %{
-        sections: %Versioce.Changelog.Sections{
+        sections: %Sections{
           added: [
             "update ci config",
             "Added tests after changelogs",
@@ -27,7 +28,7 @@ defmodule VersioceTest.Changelog.Formatters.Keepachangelog do
         version: "HEAD"
       },
       %{
-        sections: %Versioce.Changelog.Sections{
+        sections: %Sections{
           added: [
             "Initial commit"
           ],

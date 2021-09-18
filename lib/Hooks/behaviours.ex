@@ -71,23 +71,3 @@ defmodule Versioce.PostHook do
     end
   end
 end
-
-defmodule Versioce.Git.Hook do
-  @moduledoc false
-
-  @doc false
-  defmacro __using__(_opts) do
-    quote do
-      @doc false
-      defp run(false, _) do
-        {:error, "Optional dependency `git_cli` is not loaded."}
-      end
-
-      @doc false
-      def run(params) do
-        Versioce.Utils.deps_loaded?([Git])
-        |> run(params)
-      end
-    end
-  end
-end
