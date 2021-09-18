@@ -104,12 +104,23 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
   """
   @spec make_footer(Versions.t()) :: {:ok | :error, String.t()}
   def make_footer(versions) do
-    with true <- Utils.deps_loaded?([Git]) do
-      make_footer(versions, Config.Changelog.git_origin())
+    git_origin = Config.Changelog.git_origin()
+
+    with true <- Utils.deps_loaded?([Git]) or is_nil(git_origin) do
+      make_footer(versions, git_origin)
     else
       false ->
         {:error,
-         "Optional dependency `git_cli` is not loaded. It is required for Keepachangelog footer"}
+         """
+         Optional dependency `git_cli` is not loaded. It is required for Keepachangelog footer.
+
+         If `git_cli` is not used, set the `git_origin` config option to nil
+
+         ```
+         config :versioce, :changelog,
+             git_origin: nil
+         ```
+         """}
     end
   end
 
@@ -120,7 +131,7 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
       :ok,
       versions
       |> version_names()
-      |> Kernel.++([Versioce.Git.initial_commit()])
+      |> Kernel.++([Code.eval_string("Versioce.Git.initial_commit()")])
       |> Stream.chunk_every(2, 1, :discard)
       |> Stream.map(&make_footer_line/1)
       |> Enum.to_list()

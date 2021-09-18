@@ -33,7 +33,7 @@ defmodule Versioce.MixProject do
 
   def application do
     [
-      extra_applications: [:git_cli]
+      extra_applications: []
     ]
   end
 
@@ -77,7 +77,7 @@ defmodule Versioce.MixProject do
   defp dialyzer do
     [
       plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
-      plt_add_apps: [:mix]
+      plt_add_apps: [:mix, :git_cli]
     ]
   end
 end
