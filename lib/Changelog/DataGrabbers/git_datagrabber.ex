@@ -13,18 +13,13 @@ if Versioce.Utils.deps_loaded?([Git]) do
 
     @impl Versioce.Changelog.DataGrabber
     def get_data(new_version \\ "HEAD") do
-      with [_tags] <- VGit.get_tags() do
-        {
-          :ok,
-          new_version
-          |> get_new_version_name()
-          |> get_commit_groups()
-          |> prepare_group_sections(Config.Changelog.anchors())
-        }
-      else
-        [] ->
-          {:error, "No project tags found, please tag your release"}
-      end
+      {
+        :ok,
+        new_version
+        |> get_new_version_name()
+        |> get_commit_groups()
+        |> prepare_group_sections(Config.Changelog.anchors())
+      }
     end
 
     defp get_new_version_name("HEAD"), do: "HEAD"
@@ -56,9 +51,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
       |> transform_to_ranges()
       |> Enum.map(&get_messages_from_range(&1))
       |> Kernel.++([
-        tags
-        |> Enum.at(-1)
-        |> Map.get(:hash)
+        get_unreleased_hash(tags)
         |> get_unreleased_messages(new_version)
       ])
     end
@@ -91,6 +84,16 @@ if Versioce.Utils.deps_loaded?([Git]) do
         version: tag,
         messages: messages
       }
+    end
+
+    defp get_unreleased_hash([]) do
+      VGit.initial_commit()
+    end
+
+    defp get_unreleased_hash(tags) do
+      tags
+      |> Enum.at(-1)
+      |> Map.get(:hash)
     end
 
     defp get_unreleased_messages(from, new_version) do
