@@ -14,7 +14,7 @@ defmodule Versioce.Changelog.DataGrabber.Git do
   @impl Versioce.Changelog.DataGrabber
   def get_data(new_version \\ "HEAD") do
     with true <- Utils.deps_loaded?([Git]),
-         [_tags] <- VGit.get_tags() do
+         [_h | _t] <- VGit.get_tags() do
       {
         :ok,
         new_version
