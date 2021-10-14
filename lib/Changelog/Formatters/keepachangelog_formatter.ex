@@ -131,7 +131,7 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
       :ok,
       versions
       |> version_names()
-      |> Kernel.++([Code.eval_string("Versioce.Git.initial_commit()")])
+      |> append_inital_commit()
       |> Stream.chunk_every(2, 1, :discard)
       |> Stream.map(&make_footer_line/1)
       |> Enum.to_list()
@@ -143,6 +143,14 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
   defp version_names(versions) do
     versions
     |> Enum.map(&Map.fetch!(&1, :version))
+  end
+
+  defp append_inital_commit(versions) do
+    # NOTE: sadly, no way around it. Otherwise I'll get a bunch of annoying warnings
+    # from dialyzer that Git functions are not defined
+    {hash, _} = Code.eval_string("Versioce.Git.initial_commit()")
+
+    versions ++ [hash]
   end
 
   defp make_footer_line(["HEAD" = hash1, hash2]) do
