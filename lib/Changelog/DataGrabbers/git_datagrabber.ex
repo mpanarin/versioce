@@ -52,7 +52,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
       |> Enum.map(&get_messages_from_range(&1))
       |> Kernel.++([
         get_unreleased_hash(tags)
-        |> get_unreleased_messages(new_version)
+        |> get_unreleased_messages(new_version, include_from: Enum.empty?(tags))
       ])
     end
 
@@ -96,7 +96,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
       |> Map.get(:hash)
     end
 
-    defp get_unreleased_messages(from, new_version) do
+    defp get_unreleased_messages(from, new_version, include_from: false) do
       messages =
         VGit.get_commit_messages_in_range(from, "@")
         |> Enum.map(fn %{message: message} -> message end)
@@ -104,6 +104,17 @@ if Versioce.Utils.deps_loaded?([Git]) do
       %{
         version: new_version,
         messages: messages
+      }
+    end
+
+    defp get_unreleased_messages(from, new_version, include_from: true) do
+      messages =
+        VGit.get_commit_messages_in_range(from, "@")
+        |> Enum.map(fn %{message: message} -> message end)
+
+      %{
+        version: new_version,
+        messages: [VGit.get_message_from_hash(from) | messages]
       }
     end
   end
