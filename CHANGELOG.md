@@ -4,9 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [v1.1.2]
+### Added
+- :sparkles: allow changelog generation when no tags present
+
+### Fixed
+- :bug: fixed missing initial commit in changelog when no tags
+- :bug: fix `git_cli` not being truly optional
+- :bug: handle an error that occurs when no tags are found
+
+### Uncategorised
+- :pencil: fix readme typo
+
 ## [v1.1.1]
 ### Fixed
 - :bug: fix wrong latest version in changelog
+
+### Uncategorised
+- :clap: Bump version to 1.1.1
 
 ## [v1.1.0]
 ### Added
@@ -101,6 +116,7 @@ as some things wont be covered with tests
 ### Uncategorised
 - :clap: Bump version to 0.0.1
 
+[v1.1.2]: https://github.com/mpanarin/versioce/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/mpanarin/versioce/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/mpanarin/versioce/compare/v1.0.0...v1.1.0
 [v1.0.0]: https://github.com/mpanarin/versioce/compare/v0.2.1...v1.0.0
