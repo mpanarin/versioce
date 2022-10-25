@@ -1,4 +1,5 @@
 defmodule Versioce.Changelog.DataGrabber.Versions do
+  # TODO: THIS SHOULD BE A STRUCT
   alias Versioce.Changelog.Sections
 
   @type t() :: [version()]
@@ -16,6 +17,17 @@ defmodule Versioce.Changelog.DataGrabber.Versions do
     %{
       version: commit_group.version,
       sections: Sections.from_string_list(messages, anchors)
+    }
+  end
+
+  @doc """
+  Swaps version number in `version()`
+  """
+  @spec re_version(version(), String.t()) :: version()
+  def re_version(%{sections: sections}, new_version) do
+    %{
+      sections: sections,
+      version: new_version
     }
   end
 end

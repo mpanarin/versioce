@@ -33,10 +33,12 @@ if Versioce.Utils.deps_loaded?([Git]) do
     @doc """
     Create a tag.
     """
-    @spec tag(String.t(), String.t()) :: String.t()
-    def tag(name, message) do
+    @spec tag(String.t(), String.t(), list(String.t())) :: String.t()
+    def tag(name, message, params \\ []) do
+      params = ["-a", name, "-m", message | params]
+
       repo()
-      |> Git.tag!(["-a", name, "-m", message])
+      |> Git.tag!(params)
     end
 
     @doc """

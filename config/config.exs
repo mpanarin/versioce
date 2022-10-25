@@ -9,7 +9,7 @@ config :versioce,
 config :versioce, :git,
   commit_message_template: ":clap: Bump version to {version}",
   tag_template: "v{version}",
-  tag_message_template: ":clap: Release v{version}",
+  tag_message_template: ":clap: Release v{version}\n{tag_changelog}",
   additional_files: ["CHANGELOG.md"]
 
 config :versioce, :changelog,
