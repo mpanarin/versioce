@@ -45,7 +45,13 @@ if Versioce.Utils.deps_loaded?([Git]) do
     @spec get_tags() :: [%{hash: String.t(), tag: String.t()}]
     def get_tags() do
       repo()
-      |> Git.tag!(["--sort=creatordate", "--format='%(refname:strip=2)|%(objectname)'"])
+      |> Git.tag!([
+        "--list",
+        "--sort=creatordate",
+        "--format='%(refname:strip=2)|%(objectname)'",
+        "--merged",
+        "@"
+      ])
       |> String.replace("'", "")
       |> String.split("\n", trim: true)
       |> Enum.map(fn str ->
