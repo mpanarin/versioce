@@ -24,46 +24,16 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
     end
   end
 
-  @doc """
-  Generate keepachangelog header
-  """
-  @spec make_header() :: {:ok, String.t()}
-  def make_header() do
-    {:ok,
-     """
-     # Changelog
-     All notable changes to this project will be documented in this file.
-
-     The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)#{
-       if Versioce.Config.Changelog.keepachangelog_semantic() do
-         "\nThis project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)"
-       end
-     }
-     """}
-  end
-
-  @doc """
-  Generate keepachangelog body
-  """
-  @spec make_body(versions :: Versions.t()) :: {:ok, String.t()}
-  def make_body(versions) do
-    {
-      :ok,
-      versions
-      |> Enum.map(&version_to_str/1)
-      |> Enum.join("\n")
-    }
-  end
-
+  @impl Versioce.Changelog.Formatter
   @spec version_to_str(Versions.version()) :: String.t()
-  defp version_to_str(%{version: "HEAD", sections: sections}),
+  def version_to_str(%{version: "HEAD", sections: sections}),
     do:
       version_to_str(%{
         version: @unreleased_to,
         sections: sections
       })
 
-  defp version_to_str(version) do
+  def version_to_str(version) do
     """
     ## [#{version.version}]
     """
@@ -82,6 +52,35 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
       |> Enum.to_list()
       |> Enum.join("\n")
     )
+  end
+
+  @doc """
+  Generate keepachangelog header
+  """
+  @spec make_header() :: {:ok, String.t()}
+  def make_header() do
+    {:ok,
+     """
+     # Changelog
+     All notable changes to this project will be documented in this file.
+
+     The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)#{if Versioce.Config.Changelog.keepachangelog_semantic() do
+       "\nThis project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)"
+     end}
+     """}
+  end
+
+  @doc """
+  Generate keepachangelog body
+  """
+  @spec make_body(versions :: Versions.t()) :: {:ok, String.t()}
+  def make_body(versions) do
+    {
+      :ok,
+      versions
+      |> Enum.map(&version_to_str/1)
+      |> Enum.join("\n")
+    }
   end
 
   defp section_to_str(key, strings) do

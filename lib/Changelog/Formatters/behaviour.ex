@@ -8,4 +8,9 @@ defmodule Versioce.Changelog.Formatter do
   Formats the `Versioce.Changelog.DataGrabber.Versions.t()` data for changelog
   """
   @callback format(versions :: Versions.t()) :: {:ok, String.t()} | {:error, any}
+
+  @doc """
+  Formats the `Versioce.Changelog.DataGrabber.Versions.version()` data for changelog
+  """
+  @callback version_to_str(version :: Versions.version()) :: String.t()
 end
