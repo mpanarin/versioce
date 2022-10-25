@@ -60,7 +60,7 @@ defmodule Versioce.Config do
     value(
       [:git, :tag_message_template],
       "Release version to {version}",
-      "Template for the tag message. `{version}` will be replaced with the version you bumped to"
+      "Template for the tag message. `{version}` will be replaced with the version you bumped to, `{tag_changelog} with relevant changelog part.`"
     )
   end
 

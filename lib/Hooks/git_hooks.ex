@@ -46,15 +46,27 @@ if Versioce.Utils.deps_loaded?([Git]) do
     `Versioce.Config.Git.tag_template/0` and `Versioce.Config.Git.tag_message_template/0`
     """
     use Versioce.PostHook
+    alias Versioce.Config.Changelog, as: ChangelogConf
+    alias Versioce.Changelog.DataGrabber.Versions
+    import Versioce.OK, only: :macros
 
     def run(version) do
       message =
         Versioce.Config.Git.tag_message_template()
         |> String.replace("{version}", version, global: true)
+        |> String.replace(
+          "{tag_changelog}",
+          fn _ ->
+            ChangelogConf.datagrabber().get_version()
+            ~>> Versions.re_version(version)
+            |> ChangelogConf.formatter().version_to_str()
+          end,
+          global: true
+        )
 
       version
       |> Versioce.Git.get_tag_name()
-      |> Versioce.Git.tag(message)
+      |> Versioce.Git.tag(message, ["--cleanup=whitespace"])
 
       {:ok, version}
     end
