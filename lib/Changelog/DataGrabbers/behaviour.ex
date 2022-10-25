@@ -7,5 +7,5 @@ defmodule Versioce.Changelog.DataGrabber do
   @doc """
   Gets data for changelog generation, returns `Versioce.Changelog.DataGrabber.Versions.t()` format.
   """
-  @callback get_data(unreleased_to :: String.t()) :: {:ok, Versions.t()} | {:error, any}
+  @callback get_versions(unreleased_to :: String.t()) :: {:ok, Versions.t()} | {:error, any}
 end

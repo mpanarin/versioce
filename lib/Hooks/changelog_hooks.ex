@@ -13,7 +13,7 @@ defmodule Versioce.PostHooks.Changelog do
   @impl Versioce.PostHook
   def run(version) do
     with :ok <-
-           ChangelogConf.datagrabber().get_data(version)
+           ChangelogConf.datagrabber().get_versions(version)
            ~>> ChangelogConf.formatter().format()
            ~>> write_file() do
       {:ok, version}
