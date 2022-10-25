@@ -7,9 +7,9 @@ if Versioce.Utils.deps_loaded?([Git]) do
     """
     @behaviour Versioce.Changelog.DataGrabber
 
-    alias Versioce.Changelog.Sections
     alias Versioce.Git, as: VGit
     alias Versioce.Config
+    alias Versioce.Changelog.DataGrabber.Versions
 
     @impl Versioce.Changelog.DataGrabber
     def get_versions(new_version \\ "HEAD") do
@@ -22,6 +22,17 @@ if Versioce.Utils.deps_loaded?([Git]) do
       }
     end
 
+    @impl Versioce.Changelog.DataGrabber
+    def get_version(version \\ "HEAD") do
+      {
+        :ok,
+        version
+        |> get_new_version_name()
+        |> get_tag_commit_group()
+        |> Versions.make_version(Config.Changelog.anchors())
+      }
+    end
+
     defp get_new_version_name("HEAD"), do: "HEAD"
     defp get_new_version_name(name), do: name |> VGit.get_tag_name()
 
@@ -31,20 +42,17 @@ if Versioce.Utils.deps_loaded?([Git]) do
 
     defp make_groups([], _anchors, acc), do: acc
 
-    defp make_groups([%{messages: messages} = group | tail], anchors, acc) do
+    defp make_groups([group | tail], anchors, acc) do
       make_groups(
         tail,
         anchors,
         [
-          %{
-            version: group.version,
-            sections: Sections.from_string_list(messages, anchors)
-          }
+          Versions.make_version(group, anchors)
         ] ++ acc
       )
     end
 
-    defp get_commit_groups(new_version) do
+    defp get_commit_groups(version) do
       tags = VGit.get_tags()
 
       tags
@@ -52,8 +60,37 @@ if Versioce.Utils.deps_loaded?([Git]) do
       |> Enum.map(&get_messages_from_range(&1))
       |> Kernel.++([
         get_unreleased_hash(tags)
-        |> get_unreleased_messages(new_version, include_from: Enum.empty?(tags))
+        |> get_unreleased_messages(version, include_from: Enum.empty?(tags))
       ])
+    end
+
+    defp get_tag_commit_group("HEAD" = version) do
+      tags = VGit.get_tags()
+
+      get_unreleased_hash(tags)
+      |> get_unreleased_messages(version, include_from: Enum.empty?(tags))
+    end
+
+    defp get_tag_commit_group(version) do
+      tags = VGit.get_tags()
+
+      case Enum.find_index(tags, fn %{tag: x} -> x === version end) do
+        0 = index ->
+          get_messages_from_range(
+            {[
+               %{hash: VGit.initial_commit()},
+               Enum.at(tags, index)
+             ], index}
+          )
+
+        index ->
+          get_messages_from_range(
+            {[
+               Enum.at(tags, index - 1),
+               Enum.at(tags, index)
+             ], index}
+          )
+      end
     end
 
     defp transform_to_ranges(commits) do

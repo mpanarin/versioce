@@ -6,4 +6,16 @@ defmodule Versioce.Changelog.DataGrabber.Versions do
           version: String.t(),
           sections: Sections.t()
         }
+
+  # TODO: make this spec a lot more verbose
+  @doc """
+  Creates `Versioce.Changelog.DataGrabber.Versions.version()` from commit group.
+  """
+  @spec make_version(map(), map()) :: version()
+  def make_version(%{messages: messages} = commit_group, anchors) do
+    %{
+      version: commit_group.version,
+      sections: Sections.from_string_list(messages, anchors)
+    }
+  end
 end
