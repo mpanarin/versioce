@@ -12,7 +12,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
     alias Versioce.Config
 
     @impl Versioce.Changelog.DataGrabber
-    def get_data(new_version \\ "HEAD") do
+    def get_versions(new_version \\ "HEAD") do
       {
         :ok,
         new_version
