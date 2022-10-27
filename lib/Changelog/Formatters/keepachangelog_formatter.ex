@@ -6,14 +6,14 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
   """
   @behaviour Versioce.Changelog.Formatter
 
-  alias Versioce.Changelog.DataGrabber.Versions
+  alias Versioce.Changelog.DataGrabber.Version
   alias Versioce.Config
   alias Versioce.Utils
 
   @unreleased_to "Unreleased"
 
   @impl Versioce.Changelog.Formatter
-  @spec format(versions :: [Versions.t()]) :: {:ok, String.t()}
+  @spec format(versions :: [Version.t()]) :: {:ok, String.t()}
   def format(versions) do
     with {:ok, header} <- make_header(),
          {:ok, body} <- make_body(versions),
@@ -25,7 +25,7 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
   end
 
   @impl Versioce.Changelog.Formatter
-  @spec version_to_str(Versions.version()) :: String.t()
+  @spec version_to_str(Version.t()) :: String.t()
   def version_to_str(%{version: "HEAD", sections: sections}),
     do:
       version_to_str(%{
@@ -73,7 +73,7 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
   @doc """
   Generate keepachangelog body
   """
-  @spec make_body(versions :: Versions.t()) :: {:ok, String.t()}
+  @spec make_body(versions :: [Version.t()]) :: {:ok, String.t()}
   def make_body(versions) do
     {
       :ok,
@@ -101,7 +101,7 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
   Requires the optional dependency `git_cli`.
   Can be skipped by setting `Versioce.Config.Changelog.git_origin/0` to `nil`.
   """
-  @spec make_footer(Versions.t()) :: {:ok | :error, String.t()}
+  @spec make_footer([Version.t()]) :: {:ok | :error, String.t()}
   def make_footer(versions) do
     git_origin = Config.Changelog.git_origin()
 
@@ -138,7 +138,7 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
     }
   end
 
-  @spec version_names(versions :: Versions.t()) :: [String.t()]
+  @spec version_names(versions :: [Version.t()]) :: [String.t()]
   defp version_names(versions) do
     versions
     |> Enum.map(&Map.fetch!(&1, :version))

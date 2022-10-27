@@ -47,7 +47,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
     """
     use Versioce.PostHook
     alias Versioce.Config.Changelog, as: ChangelogConf
-    alias Versioce.Changelog.DataGrabber.Versions
+    alias Versioce.Changelog.DataGrabber.Version
     import Versioce.OK, only: :macros
 
     def run(version) do
@@ -58,7 +58,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
           "{tag_changelog}",
           fn _ ->
             ChangelogConf.datagrabber().get_version()
-            ~>> Versions.re_version(version)
+            ~>> Version.re_version(version)
             |> ChangelogConf.formatter().version_to_str()
           end,
           global: true

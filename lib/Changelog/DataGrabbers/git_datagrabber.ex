@@ -9,7 +9,12 @@ if Versioce.Utils.deps_loaded?([Git]) do
 
     alias Versioce.Git, as: VGit
     alias Versioce.Config
-    alias Versioce.Changelog.DataGrabber.Versions
+    alias Versioce.Changelog.DataGrabber.Version
+
+    @type commit_group() :: %{
+            version: String.t(),
+            messages: [String.t()]
+          }
 
     @impl Versioce.Changelog.DataGrabber
     def get_versions(new_version \\ "HEAD") do
@@ -29,7 +34,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
         version
         |> get_new_version_name()
         |> get_tag_commit_group()
-        |> Versions.make_version(Config.Changelog.anchors())
+        |> Version.make_version(Config.Changelog.anchors())
       }
     end
 
@@ -47,11 +52,12 @@ if Versioce.Utils.deps_loaded?([Git]) do
         tail,
         anchors,
         [
-          Versions.make_version(group, anchors)
+          Version.make_version(group, anchors)
         ] ++ acc
       )
     end
 
+    @spec get_commit_groups(String.t()) :: [commit_group()]
     defp get_commit_groups(version) do
       tags = VGit.get_tags()
 
@@ -64,6 +70,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
       ])
     end
 
+    @spec get_tag_commit_group(String.t()) :: commit_group()
     defp get_tag_commit_group("HEAD" = version) do
       tags = VGit.get_tags()
 
