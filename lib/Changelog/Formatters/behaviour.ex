@@ -2,15 +2,15 @@ defmodule Versioce.Changelog.Formatter do
   @moduledoc """
   Behaviour for formatters in versioce
   """
-  alias Versioce.Changelog.DataGrabber.Versions
+  alias Versioce.Changelog.DataGrabber.Version
 
   @doc """
-  Formats the `Versioce.Changelog.DataGrabber.Versions.t()` data for changelog
+  Formats the `[Versioce.Changelog.DataGrabber.Version.t()]` data for changelog
   """
-  @callback format(versions :: Versions.t()) :: {:ok, String.t()} | {:error, any}
+  @callback format(versions :: [Version.t()]) :: {:ok, String.t()} | {:error, any}
 
   @doc """
-  Formats the `Versioce.Changelog.DataGrabber.Versions.version()` data for changelog
+  Formats the `Versioce.Changelog.DataGrabber.Version.t()` data for changelog
   """
-  @callback version_to_str(version :: Versions.version()) :: String.t()
+  @callback version_to_str(version :: Version.t()) :: String.t()
 end
