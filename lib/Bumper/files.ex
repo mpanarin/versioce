@@ -35,6 +35,7 @@ defmodule Versioce.Bumper.FilesImplementation do
     |> Enum.each(&update_version_file(&1, from, to))
   end
 
+  @spec update_version_file(String.t(), String.t(), String.t()) :: :ok | Exception
   defp update_version_file(file, from, to) do
     data =
       File.read!(file)

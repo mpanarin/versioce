@@ -22,25 +22,6 @@ defmodule Versioce.Bumper do
     end
   end
 
-  defp add_build_pre(version, options) do
-    build =
-      case Keyword.get(options, :build) do
-        nil -> nil
-        build -> [build]
-      end
-
-    pre =
-      case Keyword.get(options, :pre) do
-        nil -> []
-        pre -> [pre]
-      end
-
-    Map.merge(version, %{
-      build: build,
-      pre: pre
-    })
-  end
-
   @doc """
   Bumps versions in all the files specified in config + mix.exs
 
@@ -123,5 +104,26 @@ defmodule Versioce.Bumper do
 
     Versioce.Bumper.Files.update_version_files(from, new_version)
     new_version
+  end
+
+  # Adds 'build' and 'pre' values to the `Version` struct of they were passed in options.
+  @spec add_build_pre(Version.t(), Keyword.t()) :: Version.t()
+  defp add_build_pre(version, options) do
+    build =
+      case Keyword.get(options, :build) do
+        nil -> nil
+        build -> [build]
+      end
+
+    pre =
+      case Keyword.get(options, :pre) do
+        nil -> []
+        pre -> [pre]
+      end
+
+    Map.merge(version, %{
+      build: build,
+      pre: pre
+    })
   end
 end

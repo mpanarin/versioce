@@ -2,9 +2,10 @@ defmodule Versioce.Tests.Factory do
   use ExMachina
   alias Versioce.Changelog.Sections
   alias Versioce.Changelog.DataGrabber.Version
+  alias Versioce.Changelog.Anchors
 
   def anchors_factory do
-    %{
+    %Anchors{
       added: ["[ADD]"],
       changed: ["[IMP]"],
       deprecated: ["[DEP]"],

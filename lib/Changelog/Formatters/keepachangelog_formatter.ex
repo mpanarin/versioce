@@ -26,19 +26,15 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
 
   @impl Versioce.Changelog.Formatter
   @spec version_to_str(Version.t()) :: String.t()
-  def version_to_str(%{version: "HEAD", sections: sections}),
-    do:
-      version_to_str(%{
-        version: @unreleased_to,
-        sections: sections
-      })
+  def version_to_str(%{version: "HEAD"} = version),
+    do: version |> Version.re_version(@unreleased_to) |> version_to_str()
 
-  def version_to_str(version) do
+  def version_to_str(%Version{version: version, sections: sections}) do
     """
-    ## [#{version.version}]
+    ## [#{version}]
     """
     |> Kernel.<>(
-      version.sections
+      sections
       |> Map.from_struct()
       |> Stream.filter(fn
         {_key, []} -> false
@@ -78,8 +74,7 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
     {
       :ok,
       versions
-      |> Enum.map(&version_to_str/1)
-      |> Enum.join("\n")
+      |> Enum.map_join("\n", &version_to_str/1)
     }
   end
 
@@ -89,8 +84,7 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
     """
     |> Kernel.<>(
       strings
-      |> Enum.map(&"- #{&1}")
-      |> Enum.join("\n")
+      |> Enum.map_join("\n", &"- #{&1}")
     )
     |> Kernel.<>("\n")
   end
