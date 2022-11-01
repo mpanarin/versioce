@@ -13,7 +13,7 @@ defmodule Mix.Tasks.Changelog do
   def run(_) do
     Mix.Task.run("compile")
 
-    ChangelogConf.datagrabber().get_data()
+    ChangelogConf.datagrabber().get_versions()
     ~>> ChangelogConf.formatter().format()
     ~>> write_file()
     |> case do
