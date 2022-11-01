@@ -27,7 +27,8 @@ defmodule Versioce.MixProject do
         "coveralls.post": :test,
         "coveralls.html": :test,
         "coveralls.json": :test
-      ]
+      ],
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
 
@@ -57,6 +58,7 @@ defmodule Versioce.MixProject do
       {:ex_doc, "~> 0.22", only: [:release, :dev]},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:excoveralls, "~> 0.15", only: :test},
+      {:ex_machina, "~> 2.7.0", only: :test},
       {:git_cli, "~> 0.3.0", optional: true}
     ]
   end
@@ -80,4 +82,7 @@ defmodule Versioce.MixProject do
       plt_add_apps: [:mix, :git_cli]
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 end

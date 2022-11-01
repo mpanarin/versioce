@@ -6,4 +6,6 @@ defmodule Versioce.TestHelper.FailingHook do
   end
 end
 
+{:ok, _} = Application.ensure_all_started(:ex_machina)
+
 ExUnit.start()

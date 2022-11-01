@@ -2,6 +2,7 @@ defmodule VersioceTest.Changelog.Formatters.Keepachangelog do
   use ExUnit.Case, async: false
   alias Versioce.Changelog.Formatter.Keepachangelog
   alias Versioce.Changelog.Sections
+  import Versioce.Tests.Factory
 
   setup do
     Application.put_env(:versioce, :changelog, [
@@ -11,23 +12,9 @@ defmodule VersioceTest.Changelog.Formatters.Keepachangelog do
     ])
 
     versions = [
-      %{
-        sections: %Sections{
-          added: [
-            "update ci config",
-            "Added tests after changelogs",
-            "Add Changelog generation, no tests for now"
-          ],
-          changed: ["changed something"],
-          deprecated: ["deprecated some endpoint"],
-          fixed: ["Some very interesting bug"],
-          other: ["Some random thing"],
-          removed: ["Something got dropped"],
-          security: ["Important security patch"]
-        },
-        version: "HEAD"
-      },
-      %{
+      build(:version),
+      build(:version,
+        version: "v0.0.1",
         sections: %Sections{
           added: [
             "Initial commit"
@@ -38,9 +25,8 @@ defmodule VersioceTest.Changelog.Formatters.Keepachangelog do
           other: ["Bump version to 0.0.1"],
           removed: [],
           security: []
-        },
-        version: "v0.0.1"
-      }
+        }
+      )
     ]
 
     %{
