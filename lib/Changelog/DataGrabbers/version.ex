@@ -17,9 +17,9 @@ defmodule Versioce.Changelog.DataGrabber.Version do
           Versioce.Changelog.DataGrabber.Git.commit_group(),
           Versioce.Changelog.Anchors.t()
         ) :: t()
-  def make_version(%{messages: messages} = commit_group, anchors) do
+  def make_version(%{messages: messages, version: version}, anchors) do
     %VersioceVersion{
-      version: commit_group.version,
+      version: version,
       sections: Sections.from_string_list(messages, anchors)
     }
   end
@@ -28,7 +28,7 @@ defmodule Versioce.Changelog.DataGrabber.Version do
   Swaps version number in `t()`
   """
   @spec re_version(t(), String.t()) :: t()
-  def re_version(%{sections: sections}, new_version) do
+  def re_version(%VersioceVersion{sections: sections}, new_version) do
     %VersioceVersion{
       sections: sections,
       version: new_version

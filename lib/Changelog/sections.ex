@@ -9,20 +9,27 @@ defmodule Versioce.Changelog.Sections do
             security: [],
             other: []
 
+  @typedoc """
+  List of messages for a single section.
+  """
+  @type section() :: [String.t()]
+
+  @typedoc """
+  Struct of sections.
+  Every section is a `section()`.
+  """
   @type t() :: %__MODULE__{
-          added: [String.t()],
-          changed: [String.t()],
-          deprecated: [String.t()],
-          removed: [String.t()],
-          fixed: [String.t()],
-          security: [String.t()],
-          other: [String.t()]
+          added: section(),
+          changed: section(),
+          deprecated: section(),
+          removed: section(),
+          fixed: section(),
+          security: section(),
+          other: section()
         }
 
-  @spec from_string_list([String.t()], map()) :: __MODULE__.t()
+  @spec from_string_list([String.t()], Anchors.t()) :: __MODULE__.t()
   def from_string_list(messages, anchors) do
-    anchors = struct!(Anchors, anchors)
-
     messages
     |> Enum.reduce(
       %__MODULE__{},
@@ -30,7 +37,7 @@ defmodule Versioce.Changelog.Sections do
     )
   end
 
-  @spec add_to_section(String.t(), __MODULE__.t(), Anchors.t()) :: __MODULE__.t()
+  @spec add_to_section(String.t(), t(), Anchors.t()) :: __MODULE__.t()
   defp add_to_section(message, sections, anchors) do
     # TODO: Write an util funciton for this.
     Enum.reduce_while(anchors |> Map.from_struct(), sections, fn {section, anchor_strings}, _ ->
