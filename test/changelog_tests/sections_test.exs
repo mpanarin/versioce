@@ -2,17 +2,9 @@ defmodule VersioceTest.Changelog.Sections do
   use ExUnit.Case, async: true
 
   alias Versioce.Changelog.Sections
+  import Versioce.Tests.Factory
 
   setup do
-    anchors = %{
-      added: ["[ADD]"],
-      changed: ["[IMP]"],
-      deprecated: ["[DEP]"],
-      removed: ["[REM]"],
-      fixed: ["[FIXED]"],
-      security: ["[SEC]"]
-    }
-
     messages = [
       "[ADD] and another thing",
       "[SEC] security patch",
@@ -25,7 +17,7 @@ defmodule VersioceTest.Changelog.Sections do
     ]
 
     %{
-      anchors: anchors,
+      anchors: build(:anchors),
       messages: messages
     }
   end
