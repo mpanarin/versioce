@@ -36,13 +36,16 @@ defmodule Versioce.Config.Macros do
             #{to_string(unquote(key))}: fn -> #{inspect(unquote(default))} end
       """
       def unquote(key)() do
-        with {:ok, val} <- Application.fetch_env(:versioce, unquote(key)) do
-          cond do
-            is_function(val, 0) -> apply(val, [])
-            true -> val
-          end
-        else
-          _ -> unquote(default)
+        case Application.fetch_env(:versioce, unquote(key)) do
+          {:ok, val} ->
+            if is_function(val, 0) do
+              val.()
+            else
+              val
+            end
+
+          _ ->
+            unquote(default)
         end
       end
     end
@@ -72,9 +75,10 @@ defmodule Versioce.Config.Macros do
       def unquote(t)() do
         with {:ok, val} <- Application.fetch_env(:versioce, unquote(h)),
              {:ok, val} <- Keyword.fetch(val, unquote(t)) do
-          cond do
-            is_function(val, 0) -> apply(val, [])
-            true -> val
+          if is_function(val, 0) do
+            val.()
+          else
+            val
           end
         else
           _ -> unquote(default)

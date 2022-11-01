@@ -1,4 +1,6 @@
 if Versioce.Utils.deps_loaded?([Git]) do
+  alias Versioce.Config.Git, as: GitConfig
+
   defmodule Versioce.Git do
     @moduledoc """
     Git utility functions for `versioce` module.
@@ -44,8 +46,8 @@ if Versioce.Utils.deps_loaded?([Git]) do
     @doc """
     Returns a list of tags in `%{hash: "Commmit hash", tag: "Tag name"}` format
     """
-    @spec get_tags() :: [%{hash: String.t(), tag: String.t()}]
-    def get_tags() do
+    @spec get_tags :: [%{hash: String.t(), tag: String.t()}]
+    def get_tags do
       repo()
       |> Git.tag!([
         "--list",
@@ -69,8 +71,8 @@ if Versioce.Utils.deps_loaded?([Git]) do
     @doc """
     Get initial commit hash.
     """
-    @spec initial_commit() :: String.t()
-    def initial_commit() do
+    @spec initial_commit :: String.t()
+    def initial_commit do
       repo()
       |> Git.rev_list!(["--max-parents=0", "HEAD"])
       |> String.trim_trailing()
@@ -113,7 +115,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
     """
     @spec get_tag_name(String.t()) :: String.t()
     def get_tag_name(version_name) do
-      Versioce.Config.Git.tag_template()
+      GitConfig.tag_template()
       |> String.replace("{version}", version_name, global: true)
     end
   end

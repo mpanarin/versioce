@@ -21,10 +21,10 @@ defmodule Versioce.OK do
     quote do
       unquote(left)
       |> Versioce.OK.unit()
-      |> (fn
-            {:ok, value} -> value |> unquote(right)
-            {:error, reason} -> {:error, reason}
-          end).()
+      |> case do
+        {:ok, value} -> value |> unquote(right)
+        {:error, reason} -> {:error, reason}
+      end
     end
   end
 end

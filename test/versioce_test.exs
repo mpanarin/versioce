@@ -1,6 +1,7 @@
 defmodule VersioceTest do
   use ExUnit.Case, async: false
   import ExUnit.CaptureIO
+  alias Mix.Tasks.Bump
 
   setup do
     %{
@@ -23,7 +24,7 @@ defmodule VersioceTest do
       ])
 
       assert capture_io(fn ->
-               Mix.Tasks.Bump.run(["0.1.1"], {:error, "no current version"})
+               Bump.run(["0.1.1"], {:error, "no current version"})
              end) == """
              Error: no current version
              """

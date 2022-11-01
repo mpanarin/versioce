@@ -1,6 +1,9 @@
 defmodule Versioce.Changelog.DataGrabber.Version do
-  alias Versioce.Changelog.Sections
+  @moduledoc """
+  Version struct and its support functions.
+  """
   alias Versioce.Changelog.DataGrabber.Version, as: VersioceVersion
+  alias Versioce.Changelog.Sections
 
   @enforce_keys [:version, :sections]
   defstruct version: "", sections: []
