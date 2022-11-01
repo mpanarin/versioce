@@ -7,6 +7,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
     """
     @behaviour Versioce.Changelog.DataGrabber
 
+    alias Versioce.Changelog.Anchors
     alias Versioce.Changelog.DataGrabber.Version
     alias Versioce.Config
     alias Versioce.Git, as: VGit
@@ -23,7 +24,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
         new_version
         |> get_new_version_name()
         |> get_commit_groups()
-        |> prepare_group_sections(Config.Changelog.anchors())
+        |> prepare_group_sections(struct!(Anchors, Config.Changelog.anchors()))
       }
     end
 
@@ -34,7 +35,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
         version
         |> get_new_version_name()
         |> get_tag_commit_group()
-        |> Version.make_version(Config.Changelog.anchors())
+        |> Version.make_version(struct!(Anchors, Config.Changelog.anchors()))
       }
     end
 
