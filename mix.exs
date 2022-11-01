@@ -59,6 +59,7 @@ defmodule Versioce.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:excoveralls, "~> 0.15", only: :test},
       {:ex_machina, "~> 2.7.0", only: :test},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:git_cli, "~> 0.3.0", optional: true}
     ]
   end

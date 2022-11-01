@@ -6,6 +6,8 @@ defmodule Versioce.Bumper do
   check `Versioce.Bumper.Files` module.
   """
 
+  alias Versioce.Bumper.Files
+
   @doc """
   Get current project version.
 
@@ -48,7 +50,7 @@ defmodule Versioce.Bumper do
 
     Version.parse!(new_version)
 
-    Versioce.Bumper.Files.update_version_files(from, new_version)
+    Files.update_version_files(from, new_version)
     new_version
   end
 
@@ -65,7 +67,7 @@ defmodule Versioce.Bumper do
 
     Version.parse!(new_version)
 
-    Versioce.Bumper.Files.update_version_files(from, new_version)
+    Files.update_version_files(from, new_version)
     new_version
   end
 
@@ -83,14 +85,14 @@ defmodule Versioce.Bumper do
 
     Version.parse!(new_version)
 
-    Versioce.Bumper.Files.update_version_files(from, new_version)
+    Files.update_version_files(from, new_version)
     new_version
   end
 
   def bump({_, [version]}, from) do
     new_version = Version.parse!(version) |> to_string
 
-    Versioce.Bumper.Files.update_version_files(from, new_version)
+    Files.update_version_files(from, new_version)
     new_version
   end
 
@@ -102,7 +104,7 @@ defmodule Versioce.Bumper do
       |> add_build_pre(options)
       |> to_string
 
-    Versioce.Bumper.Files.update_version_files(from, new_version)
+    Files.update_version_files(from, new_version)
     new_version
   end
 

@@ -1,8 +1,10 @@
 defmodule Versioce.Tests.Factory do
+  @moduledoc false
+
   use ExMachina
-  alias Versioce.Changelog.Sections
-  alias Versioce.Changelog.DataGrabber.Version
   alias Versioce.Changelog.Anchors
+  alias Versioce.Changelog.DataGrabber.Version
+  alias Versioce.Changelog.Sections
 
   def anchors_factory do
     %Anchors{

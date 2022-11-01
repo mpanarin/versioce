@@ -37,24 +37,28 @@ defmodule Versioce.Changelog.Sections do
     )
   end
 
+  # Adds message to its proper section.
+  # A message can only be in one section, the first anchor will be used
   @spec add_to_section(String.t(), t(), Anchors.t()) :: __MODULE__.t()
   defp add_to_section(message, sections, anchors) do
-    # TODO: Write an util funciton for this.
-    Enum.reduce_while(anchors |> Map.from_struct(), sections, fn {section, anchor_strings}, _ ->
-      Enum.reduce_while(anchor_strings, false, fn anchor, _ ->
-        cond do
-          Regex.match?(~r/^#{Regex.escape(anchor)}/, message) -> {:halt, section}
-          true -> {:cont, false}
+    section_name =
+      Enum.reduce_while(Map.from_struct(anchors), sections, fn {section_name, _} = anchor, _ ->
+        if in_section?(anchor, message) do
+          {:halt, section_name}
+        else
+          {:cont, :other}
         end
       end)
-      |> case do
-        false -> {:cont, false}
-        section -> {:halt, Map.update!(sections, section, &(&1 ++ [message]))}
-      end
+
+    Map.update!(sections, section_name, &(&1 ++ [message]))
+  end
+
+  @spec in_section?({atom(), [String.t()]}, String.t()) :: boolean()
+  defp in_section?({_, anchor_strings}, message) do
+    anchor_strings
+    |> Stream.map(fn anchor ->
+      Regex.match?(~r/^#{Regex.escape(anchor)}/, message)
     end)
-    |> case do
-      false -> Map.update!(sections, :other, &([message] ++ &1))
-      other -> other
-    end
+    |> Enum.any?()
   end
 end

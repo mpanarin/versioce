@@ -1,11 +1,12 @@
 defmodule VersioceTest.Bumper do
   use ExUnit.Case, async: true
+  alias Mix.Tasks.Bump
   alias Versioce.Bumper
   import ExUnit.CaptureIO
 
   defp helper_bump(options, version) do
     options
-    |> Mix.Tasks.Bump.parse()
+    |> Bump.parse()
     |> Bumper.bump(version)
   end
 

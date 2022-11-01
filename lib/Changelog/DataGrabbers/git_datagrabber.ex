@@ -7,9 +7,9 @@ if Versioce.Utils.deps_loaded?([Git]) do
     """
     @behaviour Versioce.Changelog.DataGrabber
 
-    alias Versioce.Git, as: VGit
-    alias Versioce.Config
     alias Versioce.Changelog.DataGrabber.Version
+    alias Versioce.Config
+    alias Versioce.Git, as: VGit
 
     @type commit_group() :: %{
             version: String.t(),

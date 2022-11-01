@@ -1,4 +1,5 @@
 defmodule Versioce.Bumper.Files do
+  @moduledoc false
   alias Versioce.Bumper.FilesFake
   alias Versioce.Bumper.FilesImplementation
 

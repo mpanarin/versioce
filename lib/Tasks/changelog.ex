@@ -13,12 +13,13 @@ defmodule Mix.Tasks.Changelog do
   def run(_) do
     Mix.Task.run("compile")
 
-    with :ok <-
-           ChangelogConf.datagrabber().get_data()
-           ~>> ChangelogConf.formatter().format()
-           ~>> write_file() do
-      nil
-    else
+    ChangelogConf.datagrabber().get_data()
+    ~>> ChangelogConf.formatter().format()
+    ~>> write_file()
+    |> case do
+      :ok ->
+        nil
+
       error ->
         IO.inspect(error)
         exit({:shutdown, 1})

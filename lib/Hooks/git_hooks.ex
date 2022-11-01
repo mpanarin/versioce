@@ -46,8 +46,8 @@ if Versioce.Utils.deps_loaded?([Git]) do
     `Versioce.Config.Git.tag_template/0` and `Versioce.Config.Git.tag_message_template/0`
     """
     use Versioce.PostHook
-    alias Versioce.Config.Changelog, as: ChangelogConf
     alias Versioce.Changelog.DataGrabber.Version
+    alias Versioce.Config.Changelog, as: ChangelogConf
     import Versioce.OK, only: :macros
 
     def run(version) do

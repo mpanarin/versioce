@@ -53,8 +53,8 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
   @doc """
   Generate keepachangelog header
   """
-  @spec make_header() :: {:ok, String.t()}
-  def make_header() do
+  @spec make_header :: {:ok, String.t()}
+  def make_header do
     {:ok,
      """
      # Changelog
@@ -99,21 +99,20 @@ defmodule Versioce.Changelog.Formatter.Keepachangelog do
   def make_footer(versions) do
     git_origin = Config.Changelog.git_origin()
 
-    with true <- Utils.deps_loaded?([Git]) or is_nil(git_origin) do
+    if Utils.deps_loaded?([Git]) or is_nil(git_origin) do
       make_footer(versions, git_origin)
     else
-      false ->
-        {:error,
-         """
-         Optional dependency `git_cli` is not loaded. It is required for Keepachangelog footer.
+      {:error,
+       """
+       Optional dependency `git_cli` is not loaded. It is required for Keepachangelog footer.
 
-         If `git_cli` is not used, set the `git_origin` config option to nil
+       If `git_cli` is not used, set the `git_origin` config option to nil
 
-         ```
-         config :versioce, :changelog,
-             git_origin: nil
-         ```
-         """}
+       ```
+       config :versioce, :changelog,
+       git_origin: nil
+       ```
+       """}
     end
   end
 

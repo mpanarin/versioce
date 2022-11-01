@@ -12,12 +12,11 @@ defmodule Versioce.PostHooks.Changelog do
 
   @impl Versioce.PostHook
   def run(version) do
-    with :ok <-
-           ChangelogConf.datagrabber().get_versions(version)
-           ~>> ChangelogConf.formatter().format()
-           ~>> write_file() do
-      {:ok, version}
-    else
+    ChangelogConf.datagrabber().get_versions(version)
+    ~>> ChangelogConf.formatter().format()
+    ~>> write_file()
+    |> case do
+      :ok -> {:ok, version}
       error -> error
     end
   end
