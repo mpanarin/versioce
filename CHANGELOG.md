@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+- :construction_worker: update credo config to ignore TODOs and FIXMEs
 - :construction_worker: add credo to CI
 - :sparkles: Add credo and fix issues
 - :white_check_mark: Update tests, introduce ex_machona for testing
@@ -21,6 +22,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 Now only relevant tags to current HEAD are picked up
 - :recycle: update .tool-versions
+
+### Fixed
+- :bug: fixed changelog generation
+
+### Uncategorised
+- :pencil: update CHANGELOG.md
+- :pencil: Add new migration details
 
 ### Removed
 - :coffin: a change to Datagrabber behaviour. BREAKING CHANGE
