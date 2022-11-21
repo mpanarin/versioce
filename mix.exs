@@ -60,6 +60,7 @@ defmodule Versioce.MixProject do
       {:excoveralls, "~> 0.15", only: :test},
       {:ex_machina, "~> 2.7.0", only: :test},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:mimic, "~> 1.7", only: :test},
       {:git_cli, "~> 0.3.0", optional: true}
     ]
   end
