@@ -3,6 +3,7 @@ defmodule VersioceTest.Bumper do
   alias Mix.Tasks.Bump
   alias Versioce.Bumper
   import ExUnit.CaptureIO
+  use Mimic
 
   defp helper_bump(options, version) do
     options
@@ -55,6 +56,13 @@ defmodule VersioceTest.Bumper do
   end
 
   describe "Test version bumping:" do
+    setup do
+      Versioce.Bumper.Files
+      |> stub(:update_version_files, fn _, _ -> :ok end)
+
+      :ok
+    end
+
     test "Nothing specified" do
       assert capture_io(fn ->
                assert helper_bump([], "0.1.0") == "0.1.0"

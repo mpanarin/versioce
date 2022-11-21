@@ -1,18 +1,4 @@
 defmodule Versioce.Bumper.Files do
-  @moduledoc false
-  alias Versioce.Bumper.FilesFake
-  alias Versioce.Bumper.FilesImplementation
-
-  defdelegate update_version_files(from, to),
-    to: if(Mix.env() == :test, do: FilesFake, else: FilesImplementation)
-end
-
-defmodule Versioce.Bumper.FilesFake do
-  @moduledoc false
-  def update_version_files(_from, _to), do: :ok
-end
-
-defmodule Versioce.Bumper.FilesImplementation do
   @moduledoc """
   Module that is responsible for updating files in the project.
   """

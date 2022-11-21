@@ -2,6 +2,7 @@ defmodule VersioceTest do
   use ExUnit.Case, async: false
   import ExUnit.CaptureIO
   alias Mix.Tasks.Bump
+  use Mimic
 
   setup do
     %{
@@ -14,6 +15,13 @@ defmodule VersioceTest do
   end
 
   describe "Version bumping task" do
+    setup do
+      Versioce.Bumper.Files
+      |> stub(:update_version_files, fn _, _ -> :ok end)
+
+      :ok
+    end
+
     test "No bumping if we couldn't get current_version" do
       Application.put_all_env([
         {:versioce,
