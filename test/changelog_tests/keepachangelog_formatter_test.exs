@@ -3,6 +3,7 @@ defmodule VersioceTest.Changelog.Formatters.Keepachangelog do
   alias Versioce.Changelog.Formatter.Keepachangelog
   alias Versioce.Changelog.Sections
   import Versioce.Tests.Factory
+  use Mimic
 
   setup do
     Application.put_env(:versioce, :changelog, [
@@ -144,7 +145,6 @@ defmodule VersioceTest.Changelog.Formatters.Keepachangelog do
   end
 
   describe "make_footer/1" do
-    # TODO: add test for proper footer generation
     test "ignores footer if git_origin is nil", %{versions: versions} do
       Application.put_env(:versioce, :changelog, [
         {:git_origin, nil}
@@ -152,5 +152,82 @@ defmodule VersioceTest.Changelog.Formatters.Keepachangelog do
 
       assert {:ok, ""} = versions |> Keepachangelog.make_footer()
     end
+
+    test "generates proper footer" do
+      stub_with(Versioce.Git, Versioce.Test.FakeRepository)
+      {:ok, versions} = Versioce.Changelog.DataGrabber.Git.get_versions()
+
+      footer =
+        """
+        [Unreleased]: https://github.com/mpanarin/versioce/compare/v1.0.0...HEAD
+        [v1.0.0]: https://github.com/mpanarin/versioce/compare/v0.1.0...v1.0.0
+        [v0.1.0]: https://github.com/mpanarin/versioce/compare/v0.0.2...v0.1.0
+        [v0.0.2]: https://github.com/mpanarin/versioce/compare/v0.0.1...v0.0.2
+        [v0.0.1]: https://github.com/mpanarin/versioce/compare/000...v0.0.1
+        """
+        |> String.trim_trailing()
+
+      assert {:ok, ^footer} = versions |> Keepachangelog.make_footer()
+    end
+  end
+
+  describe "format/1" do
+    stub_with(Versioce.Git, Versioce.Test.FakeRepository)
+    {:ok, versions} = Versioce.Changelog.DataGrabber.Git.get_versions()
+
+    changelog =
+      """
+      # Changelog
+      All notable changes to this project will be documented in this file.
+
+      The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+      This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+
+      ## [Unreleased]
+      ### Added
+      - :sparkles: unreleased change
+
+      ## [v1.0.0]
+      ### Fixed
+      - :bug: bug fixed
+
+      ### Removed
+      - :coffin: dead code dropped
+
+      ### Security
+      - :rotating_light: security upgraded
+
+      ## [v0.1.0]
+      ### Changed
+      - :children_crossing: improved accessibility
+      - :recycle: refactored some code
+
+      ### Deprecated
+      - :gun: deprecated a feature
+
+      ### Removed
+      - :fire: files removed
+
+      ## [v0.0.2]
+      ### Added
+      - :construction_worker: added CI
+      - :construction: this is WIP
+      - :art: improved formatting
+
+      ## [v0.0.1]
+      ### Added
+      - :sparkles: added new feature
+      - :white_check_mark: added tests
+      - :bulb: initial commit
+
+      [Unreleased]: https://github.com/mpanarin/versioce/compare/v1.0.0...HEAD
+      [v1.0.0]: https://github.com/mpanarin/versioce/compare/v0.1.0...v1.0.0
+      [v0.1.0]: https://github.com/mpanarin/versioce/compare/v0.0.2...v0.1.0
+      [v0.0.2]: https://github.com/mpanarin/versioce/compare/v0.0.1...v0.0.2
+      [v0.0.1]: https://github.com/mpanarin/versioce/compare/000...v0.0.1
+      """
+      |> String.trim_trailing()
+
+    assert {:ok, ^changelog} = versions |> Keepachangelog.format()
   end
 end
