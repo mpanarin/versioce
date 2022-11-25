@@ -7,6 +7,7 @@ defmodule Versioce.TestHelper.FailingHook do
 end
 
 Mimic.copy(Versioce.Bumper.Files)
+Mimic.copy(Versioce.Git)
 
 {:ok, _} = Application.ensure_all_started(:ex_machina)
 

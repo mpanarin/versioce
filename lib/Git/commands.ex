@@ -2,6 +2,7 @@ if Versioce.Utils.deps_loaded?([Git]) do
   alias Versioce.Config.Git, as: GitConfig
 
   defmodule Versioce.Git do
+    # coveralls-ignore-start
     @moduledoc """
     Git utility functions for `versioce` module.
     """
@@ -17,38 +18,38 @@ if Versioce.Utils.deps_loaded?([Git]) do
     @doc """
     Stage files.
     """
-    @spec add([String.t()]) :: String.t()
-    def add(args \\ ["."]) do
-      repo()
+    @spec add([String.t()], Git.Repository.t()) :: String.t()
+    def add(args \\ ["."], repo \\ repo()) do
+      repo
       |> Git.add!(args)
     end
 
     @doc """
     Make a commit with a message.
     """
-    @spec commit(String.t()) :: String.t()
-    def commit(message) do
-      repo()
+    @spec commit(String.t(), Git.Repository.t()) :: String.t()
+    def commit(message, repo \\ repo()) do
+      repo
       |> Git.commit!(["-m", message])
     end
 
     @doc """
     Create a tag.
     """
-    @spec tag(String.t(), String.t(), list(String.t())) :: String.t()
-    def tag(name, message, params \\ []) do
+    @spec tag(String.t(), String.t(), list(String.t()), Git.Repository.t()) :: String.t()
+    def tag(name, message, params \\ [], repo \\ repo()) do
       params = ["-a", name, "-m", message | params]
 
-      repo()
+      repo
       |> Git.tag!(params)
     end
 
     @doc """
     Returns a list of tags in `%{hash: "Commmit hash", tag: "Tag name"}` format
     """
-    @spec get_tags :: [%{hash: String.t(), tag: String.t()}]
-    def get_tags do
-      repo()
+    @spec get_tags(Git.Repository.t()) :: [%{hash: String.t(), tag: String.t()}]
+    def get_tags(repo \\ repo()) do
+      repo
       |> Git.tag!([
         "--list",
         "--sort=creatordate",
@@ -71,9 +72,9 @@ if Versioce.Utils.deps_loaded?([Git]) do
     @doc """
     Get initial commit hash.
     """
-    @spec initial_commit :: String.t()
-    def initial_commit do
-      repo()
+    @spec initial_commit(Git.Repository.t()) :: String.t()
+    def initial_commit(repo \\ repo()) do
+      repo
       |> Git.rev_list!(["--max-parents=0", "HEAD"])
       |> String.trim_trailing()
     end
@@ -81,9 +82,9 @@ if Versioce.Utils.deps_loaded?([Git]) do
     @doc """
     Get message of a commit by its hash.
     """
-    @spec get_message_from_hash(String.t()) :: String.t()
-    def get_message_from_hash(hash) do
-      repo()
+    @spec get_message_from_hash(String.t(), Git.Repository.t()) :: String.t()
+    def get_message_from_hash(hash, repo \\ repo()) do
+      repo
       |> Git.log!(["--pretty=format:'%B'", "-1", hash])
       |> String.replace("'", "")
       |> String.trim()
@@ -92,11 +93,11 @@ if Versioce.Utils.deps_loaded?([Git]) do
     @doc """
     Get a list of messages from hash1 to hash2 in `%{hash: "Commmit hash", message: "Commit message"}` format
     """
-    @spec get_commit_messages_in_range(String.t(), String.t()) :: [
+    @spec get_commit_messages_in_range(String.t(), String.t(), Git.Repository.t()) :: [
             %{hash: String.t(), message: String.t()}
           ]
-    def get_commit_messages_in_range(hash1, hash2) do
-      repo()
+    def get_commit_messages_in_range(hash1, hash2, repo \\ repo()) do
+      repo
       |> Git.log!(["--pretty=format:'%H|%B%|%'", "#{hash1}..#{hash2}"])
       |> String.replace("'", "")
       |> String.split("%|%", trim: true)
@@ -119,4 +120,6 @@ if Versioce.Utils.deps_loaded?([Git]) do
       |> String.replace("{version}", version_name, global: true)
     end
   end
+
+  # coveralls-ignore-stop
 end
