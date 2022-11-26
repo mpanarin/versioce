@@ -25,6 +25,22 @@ defmodule Versioce.Config do
     "Whether the update will be global in file.\nBy default versioce will update only the first version in file it finds"
   )
 
+  value(
+    :calver_format,
+    "YYYY.0M.0D",
+    """
+    What format to use for version when using CalVer.
+    It should be still 3 values separated by a dot semver style.
+
+    Available parts are:
+    YYYY - Full year - 2006, 2016, 2106
+    MM - Short month - 1, 2 ... 11, 12
+    0M - Zero-padded month - 01, 02 ... 11, 12
+    DD - Short day - 1, 2 ... 30, 31
+    0D - Zero-padded day - 01, 02 ... 30, 31
+    """
+  )
+
   value(:pre_hooks, [], "Hooks to run before the version bumping")
   value(:post_hooks, [], "Hooks to run after the version bumping")
 

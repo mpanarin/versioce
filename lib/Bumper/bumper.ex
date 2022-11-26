@@ -6,7 +6,9 @@ defmodule Versioce.Bumper do
   check `Versioce.Bumper.Files` module.
   """
 
+  alias Versioce.Bumper.CalverFormattingParser
   alias Versioce.Bumper.Files
+  alias Versioce.Config
 
   @doc """
   Get current project version.
@@ -84,6 +86,16 @@ defmodule Versioce.Bumper do
       |> to_string
 
     Version.parse!(new_version)
+
+    Files.update_version_files(from, new_version)
+    new_version
+  end
+
+  def bump({_options, ["calver"]}, from) do
+    today = Date.utc_today()
+    format = Config.calver_format()
+
+    {:ok, new_version} = CalverFormattingParser.parse_format(format, today)
 
     Files.update_version_files(from, new_version)
     new_version

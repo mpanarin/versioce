@@ -3,7 +3,9 @@ defmodule Mix.Tasks.Bump do
   @moduledoc """
   A task that bumps your projects version.
 
-  > mix bump major|minor|patch [--pre :string] [--build :string] [--no-pre-hooks] [--no-post-hooks]
+  > mix bump major|minor|patch|calver [--pre :string] [--build :string] [--no-pre-hooks] [--no-post-hooks]
+
+  CalVer does not support --pre and --build. Both will be ignored
 
   ## Examples:
 
