@@ -17,6 +17,7 @@ It is heavily inspired by [bumpversion](https://github.com/peritus/bumpversion).
     - [Pre Hooks](#pre-hooks)
     - [Post Hooks](#post-hooks)
   - [Bump your versions!](#bump-your-versions)
+    - [CalVer](#calver)
   - [Changelog generation](#changelog-generation)
 - [The name](#the-name)
 - [Similar projects](#similar-projects)
@@ -177,6 +178,26 @@ Done.
 Running pre-hooks: []
 Bumping version from 0.1.1-alpha.3:
 0.1.1-alpha.3+20210101011700.amd64
+Running post-hooks: []
+Done.
+```
+
+#### CalVer
+Versioce has a limited support for [CalVer](https://calver.org/).
+
+Be aware that it is supported lazily, ie. if you start using regular semantic versioning you will need to make a bump to a specific sematic version first,
+otherwise Versioce will bump your calver version like it is a semantic one. This is probably not what you want.
+
+CalVer also currently does not support `--pre` and `--build` params, they will be ignored.
+For the available formats of the calver consult the [config docs](Versioce.Config.html)
+
+```
+> mix bump.version
+0.1.0
+> mix bump calver
+Running pre-hooks: []
+Bumping version from 0.1.0:
+2022.11.28
 Running post-hooks: []
 Done.
 ```
