@@ -4,8 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
-## [Unreleased]
+## [v2.0.0]
 ### Added
+- :white_check_mark: Add tests for calver formatting
+- :construction_worker: update CI to run dialyzer and credo in test env
+
+to avoid compiling for both dev and test in CI
+- :sparkles: CalVer is now supported
+- :white_check_mark: add tests for git datagrabber
+- :construction_worker: update github actions to newer versions
+- :white_check_mark: add mock for git operations
+
+finish coverage of keepachangelog_formatter
+- :white_check_mark: add mimic and mock Versioce.Bumper.Files
 - :construction_worker: update credo config to ignore TODOs and FIXMEs
 - :construction_worker: add credo to CI
 - :sparkles: Add credo and fix issues
@@ -27,6 +38,7 @@ Now only relevant tags to current HEAD are picked up
 - :bug: fixed changelog generation
 
 ### Uncategorised
+- :pencil: update README with calver info
 - :pencil: update CHANGELOG.md
 - :pencil: Add new migration details
 
@@ -148,7 +160,7 @@ as some things wont be covered with tests
 ### Uncategorised
 - :clap: Bump version to 0.0.1
 
-[Unreleased]: https://github.com/mpanarin/versioce/compare/v1.1.2...HEAD
+[v2.0.0]: https://github.com/mpanarin/versioce/compare/v1.1.2...v2.0.0
 [v1.1.2]: https://github.com/mpanarin/versioce/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/mpanarin/versioce/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/mpanarin/versioce/compare/v1.0.0...v1.1.0

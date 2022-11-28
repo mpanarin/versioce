@@ -30,7 +30,7 @@ The [package](https://hex.pm/packages/versioce) can be installed by adding `vers
 ```elixir
 def deps do
   [
-    {:versioce, "~> 1.1.2"}
+    {:versioce, "~> 2.0.0"}
   ]
 end
 ```

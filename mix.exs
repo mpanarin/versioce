@@ -2,7 +2,7 @@ defmodule Versioce.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/mpanarin/versioce"
-  @version "1.1.2"
+  @version "2.0.0"
 
   def project do
     [
