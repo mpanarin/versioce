@@ -56,7 +56,7 @@ defmodule Versioce.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.22", only: [:release, :dev]},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.15", only: :test},
       {:ex_machina, "~> 2.7.0", only: :test},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
