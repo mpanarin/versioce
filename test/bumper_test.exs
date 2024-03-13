@@ -6,9 +6,12 @@ defmodule VersioceTest.Bumper do
   use Mimic
 
   defp helper_bump(options, version) do
-    options
+    options = options
     |> Bump.parse()
-    |> Bumper.bump(version)
+
+    new_version = Bumper.get_new_version(options, version)
+
+    Bumper.bump(version, new_version)
   end
 
   defp test_versioning(binding, new_vers) do
@@ -77,6 +80,13 @@ defmodule VersioceTest.Bumper do
     test "Bump with minor" do
       test_versioning("minor", "0.2.0")
       test_build_pre("minor", "0.2.0")
+    end
+
+    test "Bump with next" do
+      assert helper_bump(["next"], "0.1.0-alpha") == "0.1.0"
+      assert helper_bump(["next", "--pre", "beta"], "0.1.0-alpha") == "0.1.0-beta"
+      assert helper_bump(["next", "--pre", "beta"], "0.1.0") == "0.1.0-beta"
+      test_build_pre("next", "0.1.0")
     end
 
     test "Bump with major" do
