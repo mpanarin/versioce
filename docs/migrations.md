@@ -1,3 +1,18 @@
+# Migrating from `< 3.0.0`
+Version `3.0.0` introduced breaking changes:
+1. `mix.exs` is no longer part of default `files`
+For the same behavior as before add `mix.exs` to `files` in config
+```elixir
+config :versioce,
+  files: ["mix.exs", "README.md"]
+```
+2. Default message for `tag_message_template` configuration changed.
+For the same behavior as before
+```elixir
+config :versioce, :git,
+  tag_message_template: "Release version to {version}"
+```
+
 # Migrating from `< 2.0.0`
 Version `2.0.0` added a breaking change to changelog generation behaviors.
 
