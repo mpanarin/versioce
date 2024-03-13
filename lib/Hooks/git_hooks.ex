@@ -54,7 +54,19 @@ if Versioce.Utils.deps_loaded?([Git]) do
       message =
         Versioce.Config.Git.tag_message_template()
         |> String.replace("{version}", version, global: true)
-        |> String.replace(
+        |> maybe_add_changelog(version)
+
+      version
+      |> Versioce.Git.get_tag_name()
+      |> Versioce.Git.tag(message, ["--cleanup=whitespace"])
+
+      {:ok, version}
+    end
+
+    defp maybe_add_changelog(message, version) do
+      if String.contains?(message, "{tag_changelog}") do
+        String.replace(
+          message,
           "{tag_changelog}",
           fn _ ->
             ChangelogConf.datagrabber().get_version()
@@ -63,12 +75,9 @@ if Versioce.Utils.deps_loaded?([Git]) do
           end,
           global: true
         )
-
-      version
-      |> Versioce.Git.get_tag_name()
-      |> Versioce.Git.tag(message, ["--cleanup=whitespace"])
-
-      {:ok, version}
+      else
+        message
+      end
     end
   end
 
