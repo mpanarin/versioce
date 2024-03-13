@@ -91,7 +91,7 @@ defmodule VersioceTest.Bumper do
       assert helper_bump(["2.3.3-foo"], vers) == "2.3.3-foo"
       assert helper_bump(["2.3.3+bar"], vers) == "2.3.3+bar"
       assert helper_bump(["2.3.3-foo+bar"], vers) == "2.3.3-foo+bar"
-      assert helper_bump(["2.3.3-foo.3-1+bar.50-6"], vers) == "2.3.3-foo.3-1+bar50-6"
+      assert helper_bump(["2.3.3-foo.3-1+bar.50-6"], vers) == "2.3.3-foo.3-1+bar.50-6"
 
       assert_raise Version.InvalidVersionError, fn ->
         helper_bump(["2.3.3-foo[]"], vers)
