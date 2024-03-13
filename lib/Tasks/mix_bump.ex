@@ -3,7 +3,11 @@ defmodule Mix.Tasks.Bump do
   @moduledoc """
   A task that bumps your projects version.
 
-  > mix bump major|minor|patch|calver [--pre :string] [--build :string] [--no-pre-hooks] [--no-post-hooks]
+  > mix bump major|minor|patch|calver|next [--pre :string] [--build :string] [--no-pre-hooks] [--no-post-hooks]
+
+  major|minor|patch - bumps corresponding part of the project version
+  calver - bumps to current calver version
+  next - bumps to the next version from a pre-release
 
   CalVer does not support --pre and --build. Both will be ignored
 
@@ -13,6 +17,24 @@ defmodule Mix.Tasks.Bump do
       Running pre-hooks: []
       Bumping version from 0.0.2:
       "0.0.3-alpha"
+      Running post-hooks: []
+
+      $> mix bump next --pre beta
+      Running pre-hooks: []
+      Bumping version from 0.0.3-alpha:
+      "0.0.3-beta"
+      Running post-hooks: []
+
+      $> mix bump next
+      Running pre-hooks: []
+      Bumping version from 0.0.3-beta:
+      "0.0.3"
+      Running post-hooks: []
+
+      $> mix bump major
+      Running pre-hooks: []
+      Bumping version from 0.0.3:
+      "1.0.0"
       Running post-hooks: []
   """
   use Mix.Task
@@ -50,12 +72,10 @@ defmodule Mix.Tasks.Bump do
     end
   end
 
-  defp bump(options, current_version) do
+  defp bump(current_version, new_version) do
     IO.puts("Bumping version from #{current_version}:")
 
-    new_version =
-      Bumper.bump(options, current_version)
-      |> IO.inspect()
+    Bumper.bump(current_version, new_version) |> IO.inspect()
 
     {:ok, new_version}
   end
@@ -72,12 +92,18 @@ defmodule Mix.Tasks.Bump do
   end
 
   def run(options, {:ok, current_version}) do
-    with {:ok, _} <- run_pre_hooks(options),
-         {:ok, new_version} <- bump(options, current_version),
-         {:ok, _} <- run_post_hooks({options, new_version}) do
-      {:ok, new_version}
+    new_version = Bumper.get_new_version(options, current_version)
+
+    if new_version === current_version do
+      IO.puts("Bumping to the same version, nothing to do")
     else
-      {:error, reason} -> IO.puts(reason)
+      with {:ok, _} <- run_pre_hooks(options),
+           {:ok, new_version} <- bump(current_version, new_version),
+           {:ok, _} <- run_post_hooks({options, new_version}) do
+        {:ok, new_version}
+      else
+        {:error, reason} -> IO.puts(reason)
+      end
     end
   end
 
