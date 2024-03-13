@@ -12,16 +12,23 @@ config :versioce, :git,
 config :versioce, :changelog,
   anchors: %{
     added: [
-      ":sparkles:",
-      ":bulb:",
-      ":art:",
-      ":construction_worker:",
-      ":white_check_mark:",
-      ":construction:"
+      ":sparkles:",  # Added new feature
+      ":bulb:",  # Added/changed comments, etc.
+      ":art:",  # Added/changed docs
+      ":construction_worker:",  # CI stuff
+      ":white_check_mark:",  # Added/changed tests
+      ":construction:",  # wip commits
     ],
-    changed: [":recycle:", ":children_crossing:"],
+    changed: [
+      ":recycle:",  # Code refactors
+      ":children_crossing:",  # User experience improvements
+      ":boom:"  # breaking changes
+    ],
     deprecated: [":gun:"],
-    removed: [":fire:", ":coffin:"],
+    removed: [
+      ":fire:",  # code/files removal
+      ":coffin:"  # dead code removal
+    ],
     fixed: [":bug:"],
     security: [":rotating_light:"]
   },
