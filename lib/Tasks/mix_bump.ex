@@ -5,6 +5,10 @@ defmodule Mix.Tasks.Bump do
 
   > mix bump major|minor|patch|calver|next [--pre :string] [--build :string] [--no-pre-hooks] [--no-post-hooks]
 
+  major|minor|patch - bumps corresponding part of the project version
+  calver - bumps to current calver version
+  next - bumps to the next version from a pre-release
+
   CalVer does not support --pre and --build. Both will be ignored
 
   ## Examples:

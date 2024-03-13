@@ -17,6 +17,7 @@ It is heavily inspired by [bumpversion](https://github.com/peritus/bumpversion).
     - [Pre Hooks](#pre-hooks)
     - [Post Hooks](#post-hooks)
   - [Bump your versions!](#bump-your-versions)
+    - [Pre and Build params](#pre-and-build-params)
     - [CalVer](#calver)
   - [Changelog generation](#changelog-generation)
 - [The name](#the-name)
@@ -101,7 +102,6 @@ Running pre-hooks: [MyProj.Versioce.PreHook]
 Bumping version from 0.1.0:
 0.1.1
 Running post-hooks: []
-Done.
 ```
 
 #### Post hooks
@@ -135,10 +135,11 @@ Bumping version from 0.1.0:
 0.1.1
 Running post-hooks: [MyProj.Versioce.PostHook]
 "0.1.1"
-Done.
 ```
 
 ### Bump your versions!
+
+Check documentation of the [mix bump task](Mix.Tasks.Bump.html)
 
 Simply run `mix bump` with the preferred binding or a ready version.
 ```
@@ -149,20 +150,19 @@ Running pre-hooks: []
 Bumping version from 0.1.0:
 0.1.1
 Running post-hooks: []
-Done.
 > mix bump major
 Running pre-hooks: []
 Bumping version 0.1.1:
 1.0.0
 Running post-hooks: []
-Done.
 > mix bump 2.0.2
 Running pre-hooks: []
 Bumping version from 1.1.1:
 2.0.2
 Running post-hooks: []
-Done.
 ```
+
+#### Pre and Build params
 
 You can also add pre-release or build information easily with `--pre` or `--build`
 ```
@@ -171,15 +171,34 @@ You can also add pre-release or build information easily with `--pre` or `--buil
 > mix bump --pre alpha.3
 Running pre-hooks: []
 Bumping version from 0.1.0:
-0.1.1-alpha.3
+0.1.0-alpha.3
 Running post-hooks: []
-Done.
 > mix bump --build 20210101011700.amd64
 Running pre-hooks: []
-Bumping version from 0.1.1-alpha.3:
-0.1.1-alpha.3+20210101011700.amd64
+Bumping version from 0.1.0-alpha.3:
+0.1.0-alpha.3+20210101011700.amd64
 Running post-hooks: []
-Done.
+```
+
+After using `--pre` you can bump to the full version or next iteration via `bump next`
+```
+> mix bump.version
+0.1.0
+> mix bump --pre alpha.3
+Running pre-hooks: []
+Bumping version from 0.1.0:
+0.1.0-alpha.3
+Running post-hooks: []
+> mix bump next --pre alpha.4
+Running pre-hooks: []
+Bumping version from 0.1.0-alpha.3:
+0.1.0-alpha.4
+Running post-hooks: []
+> mix bump next
+Running pre-hooks: []
+Bumping version from 0.1.0-alpha.4:
+0.1.0
+Running post-hooks: []
 ```
 
 #### CalVer
@@ -199,7 +218,6 @@ Running pre-hooks: []
 Bumping version from 0.1.0:
 2022.11.28
 Running post-hooks: []
-Done.
 ```
 
 ### Changelog generation
