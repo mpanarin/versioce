@@ -50,12 +50,10 @@ defmodule Mix.Tasks.Bump do
     end
   end
 
-  defp bump(options, current_version) do
+  defp bump(current_version, new_version) do
     IO.puts("Bumping version from #{current_version}:")
 
-    new_version =
-      Bumper.bump(options, current_version)
-      |> IO.inspect()
+    Bumper.bump(current_version, new_version) |> IO.inspect()
 
     {:ok, new_version}
   end
@@ -72,12 +70,20 @@ defmodule Mix.Tasks.Bump do
   end
 
   def run(options, {:ok, current_version}) do
-    with {:ok, _} <- run_pre_hooks(options),
-         {:ok, new_version} <- bump(options, current_version),
-         {:ok, _} <- run_post_hooks({options, new_version}) do
-      {:ok, new_version}
-    else
-      {:error, reason} -> IO.puts(reason)
+    new_version = Bumper.get_new_version(options, current_version)
+
+    cond do
+      new_version === current_version ->
+        IO.puts("Bumping to the same version, nothing to do")
+
+      true ->
+        with {:ok, _} <- run_pre_hooks(options),
+             {:ok, new_version} <- bump(current_version, new_version),
+             {:ok, _} <- run_post_hooks({options, new_version}) do
+          {:ok, new_version}
+        else
+          {:error, reason} -> IO.puts(reason)
+        end
     end
   end
 
