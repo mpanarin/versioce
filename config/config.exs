@@ -1,6 +1,7 @@
 import Config
 
 config :versioce,
+  files: ["mix.exs", "README.md"],
   post_hooks: [Versioce.PostHooks.Changelog, Versioce.PostHooks.Git.Release]
 
 config :versioce, :git,

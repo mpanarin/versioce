@@ -18,8 +18,7 @@ defmodule Versioce.Bumper.Files do
   """
   @spec update_version_files(String.t(), String.t()) :: :ok | Exception
   def update_version_files(from, to) do
-    ["mix.exs" | Config.files()]
-    |> Enum.each(&update_version_file(&1, from, to))
+    Enum.each(Config.files(), &update_version_file(&1, from, to))
   end
 
   @spec update_version_file(String.t(), String.t(), String.t()) :: :ok | Exception
