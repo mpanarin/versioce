@@ -99,6 +99,20 @@ defmodule Versioce.Bumper do
     new_version
   end
 
+  def get_new_version({options, ["next"]}, from) do
+    from_v = Version.parse!(from)
+
+    new_version =
+      Map.merge(from_v, %{
+        pre: []
+      })
+      |> add_build_pre(options)
+      |> to_string
+
+    Version.parse!(new_version)
+    new_version
+  end
+
   def get_new_version({_options, ["calver"]}, _from) do
     today = Date.utc_today()
     format = Config.calver_format()
