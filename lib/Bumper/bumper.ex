@@ -27,6 +27,27 @@ defmodule Versioce.Bumper do
   end
 
   @doc """
+  Get current normal project version.
+
+  ## Example
+
+      iex> Versioce.Bumper.current_normal_version
+      {:ok, "0.1.0"}
+  """
+  @spec current_normal_version() :: {:ok, String.t()} | {:error, String.t()}
+  def current_normal_version do
+    case current_version() do
+      {:error, _} = error -> error
+      {:ok, version} ->
+        version
+        |> Version.parse!()
+        |> Map.merge(%{pre: [], build: nil})
+        |> to_string()
+        |> then(fn value -> {:ok, value} end)
+    end
+  end
+
+  @doc """
   Bumps versions in all the files specified in config.
 
   ## Example

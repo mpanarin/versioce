@@ -101,7 +101,6 @@ Running pre-hooks: [MyProj.Versioce.PreHook]
 Bumping version from 0.1.0:
 0.1.1
 Running post-hooks: []
-Done.
 ```
 
 #### Post hooks
@@ -135,7 +134,6 @@ Bumping version from 0.1.0:
 0.1.1
 Running post-hooks: [MyProj.Versioce.PostHook]
 "0.1.1"
-Done.
 ```
 
 ### Bump your versions!
@@ -149,19 +147,16 @@ Running pre-hooks: []
 Bumping version from 0.1.0:
 0.1.1
 Running post-hooks: []
-Done.
 > mix bump major
 Running pre-hooks: []
 Bumping version 0.1.1:
 1.0.0
 Running post-hooks: []
-Done.
 > mix bump 2.0.2
 Running pre-hooks: []
 Bumping version from 1.1.1:
 2.0.2
 Running post-hooks: []
-Done.
 ```
 
 You can also add pre-release or build information easily with `--pre` or `--build`
@@ -171,15 +166,35 @@ You can also add pre-release or build information easily with `--pre` or `--buil
 > mix bump --pre alpha.3
 Running pre-hooks: []
 Bumping version from 0.1.0:
-0.1.1-alpha.3
+0.1.0-alpha.3
 Running post-hooks: []
-Done.
 > mix bump --build 20210101011700.amd64
 Running pre-hooks: []
-Bumping version from 0.1.1-alpha.3:
-0.1.1-alpha.3+20210101011700.amd64
+Bumping version from 0.1.0-alpha.3:
+0.1.0-alpha.3+20210101011700.amd64
 Running post-hooks: []
-Done.
+```
+
+After using `--pre` or `--build` you may want to bump to a full normal version.
+While Versioce does not directly support it, it has a handy task `bump.version.normal`, which will return a normal version. You can use it in `bump` task
+
+```
+> mix bump.version
+0.1.0
+> mix bump --pre alpha.3
+Running pre-hooks: []
+Bumping version from 0.1.0:
+0.1.0-alpha.3
+Running post-hooks: []
+> mix bump.version
+0.1.0-alpha.3
+> mix bump.version.normal
+0.1.0
+> mix bump "$(mix bump.version.normal)"
+Running pre-hooks: []
+Bumping version from 0.1.0-alpha.3:
+0.1.0
+Running post-hooks: []
 ```
 
 #### CalVer
@@ -199,7 +214,6 @@ Running pre-hooks: []
 Bumping version from 0.1.0:
 2022.11.28
 Running post-hooks: []
-Done.
 ```
 
 ### Changelog generation
