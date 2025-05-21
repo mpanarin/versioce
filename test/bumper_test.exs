@@ -6,9 +6,12 @@ defmodule VersioceTest.Bumper do
   use Mimic
 
   defp helper_bump(options, version) do
-    options
+    options = options
     |> Bump.parse()
-    |> Bumper.bump(version)
+
+    new_version = Bumper.get_new_version(options, version)
+
+    Bumper.bump(version, new_version)
   end
 
   defp test_versioning(binding, new_vers) do
@@ -53,6 +56,12 @@ defmodule VersioceTest.Bumper do
 
   test "Proper current version is returned", fixture do
     assert Bumper.current_version() == {:ok, fixture.current_version}
+  end
+
+  test "Proper current normal version is returned" do
+    stub(Mix.Project, :config, fn -> %{version: "0.1.0-alpha+123.123"} end)
+
+    assert Bumper.current_normal_version() == {:ok, "0.1.0"}
   end
 
   describe "Test version bumping:" do

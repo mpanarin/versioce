@@ -8,6 +8,7 @@ end
 
 Mimic.copy(Versioce.Bumper.Files)
 Mimic.copy(Versioce.Git)
+Mimic.copy(Mix.Project)
 
 {:ok, _} = Application.ensure_all_started(:ex_machina)
 

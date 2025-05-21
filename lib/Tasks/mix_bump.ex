@@ -5,6 +5,9 @@ defmodule Mix.Tasks.Bump do
 
   > mix bump major|minor|patch|calver [--pre :string] [--build :string] [--no-pre-hooks] [--no-post-hooks]
 
+  major|minor|patch - bumps corresponding part of the project version
+  calver - bumps to current calver version
+
   CalVer does not support --pre and --build. Both will be ignored
 
   ## Examples:
@@ -72,11 +75,9 @@ defmodule Mix.Tasks.Bump do
   def run(options, {:ok, current_version}) do
     new_version = Bumper.get_new_version(options, current_version)
 
-    cond do
-      new_version === current_version ->
+      if new_version === current_version do
         IO.puts("Bumping to the same version, nothing to do")
-
-      true ->
+      else
         with {:ok, _} <- run_pre_hooks(options),
              {:ok, new_version} <- bump(current_version, new_version),
              {:ok, _} <- run_post_hooks({options, new_version}) do
